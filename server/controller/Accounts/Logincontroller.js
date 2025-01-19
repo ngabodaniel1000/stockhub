@@ -11,6 +11,7 @@ exports.validatelogin = async (req, res) => {
   // check if user email exist
   const checkuser = await Manager.findOne({ email })
   try {
+    // consition for checking user credentials
     if (checkuser) {
       if (checkuser.password === password) {
         if (checkuser.role === "Admin") {
