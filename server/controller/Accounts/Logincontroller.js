@@ -5,7 +5,7 @@ const Manager = require("../../model/Accounts/Managersmodel")
 exports.validatelogin = async (req, res) => {
 
   // parsing url body
-  const { username, email, password } = req.body
+  const {email, password } = req.body
 
 
   // check if user email exist
@@ -15,14 +15,14 @@ exports.validatelogin = async (req, res) => {
     if (checkuser) {
       if (checkuser.password === password) {
         if (checkuser.role === "Admin") {
-          res.send("Logged as admin")
+          res.status(200).send("Logged as admin")
         }
         else {
-          res.send("logged in as manager")
+          res.status(200).send("logged in as manager")
         }
       }
       else {
-        res.send("Invalid password")
+        res.status(401).send("Invalid password")
       }
     }
 
