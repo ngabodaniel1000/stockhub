@@ -1,5 +1,5 @@
 // Import Manager model
-const Manager = require("../../model/Accounts/Managersmodel");
+const Admin = require("../../model/Accounts/Managersmodel");
 
 // Function to validate login
 exports.validateLogin = async (req, res) => {
@@ -12,25 +12,30 @@ exports.validateLogin = async (req, res) => {
 
   try {
     // Check if user exists
-    const user = await Manager.findOne({ email });
+    const user = await Admin.findOne({ email });
     if (!user) {
       return res.status(404).json({ success: false, message: "User does not exist" });
     }
-
+    
     // Compare plaintext password
     if (user.password !== password) {
       return res.status(401).json({ success: false, message: "Invalid password" });
     }
-
-
+    
+    
     // Check role and respond accordingly
     if (user.role === "Admin") {
+      req.session.username = user.username
+      req.session.email = user.email
+      req.session.role = user.role
+      req.session.id = user.id
+      console.log(req.session);
+      
       return res.status(200).json({ success: true, message: "Logged in as admin", role: "Admin" });
         // Store user data in session
+        
     } else {
-      return res.status(401).json({ success: false, message: "Failed to log in as admin"});
-      
-             
+      return res.status(403).json({ success: false, message: "Failed to log in as admin"});          
         // Store user data in session
     }
   

@@ -26,11 +26,10 @@ app.use(session({
       mongoUrl: 'mongodb://localhost:27017/stockhub', // MongoDB URL
       collectionName: 'sessions', // Optional: name of the collection to store sessions
     }),
-    cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24,sameSite: 'lax'} // 30 minutes; change to `secure: true` for production
+    cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24,sameSite: 'lax'}
   }));
 
 // to call all routes
 app.use('/api', Router)
-
 // listening server port 
 app.listen(port, () => console.log(`App is listening on port ${port}!`))
