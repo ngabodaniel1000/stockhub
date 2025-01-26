@@ -25,18 +25,17 @@ exports.validateLogin = async (req, res) => {
     
     // Check role and respond accordingly
     if (user.role === "Admin") {
+      // Store user data in session
       req.session.username = user.username
       req.session.email = user.email
       req.session.role = user.role
-      req.session.id = user.id
+      req.session.Userid = user._id
       console.log(req.session);
       
       return res.status(200).json({ success: true, message: "Logged in as admin", role: "Admin" });
-        // Store user data in session
         
     } else {
       return res.status(403).json({ success: false, message: "Failed to log in as admin"});          
-        // Store user data in session
     }
   
   } catch (error) {
