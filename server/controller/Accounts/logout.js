@@ -1,3 +1,4 @@
+// code to make logout functionality
 exports.logout = async (req, res) => {
     try {
       req.session.destroy();
