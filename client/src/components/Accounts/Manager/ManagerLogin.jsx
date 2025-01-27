@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
@@ -52,7 +52,7 @@ function Login() {
           draggable: true,
         });
         setTimeout(() => {
-          navigate('/dashboard');
+          navigate('/managerdashboard');
         }, 3000);
       } else {
         toast.error(response.data.message, {
@@ -78,6 +78,23 @@ function Login() {
       );
     }
   };
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const response = await axios.get("http://localhost:8889/api/dashboard", {
+          withCredentials: true, // Send cookies with the request
+        });
+        if (response.data.loggedIn) {
+          // Redirect to login if not logged in
+          navigate("/managerdashboard");
+        } 
+      } catch (err) {
+        console.error("Error fetching user profile:", err);
+      }
+    };
+
+    fetchUserProfile();
+  }, []);
 
   return (
     <div className="flex items-center justify-center min-h-screen">

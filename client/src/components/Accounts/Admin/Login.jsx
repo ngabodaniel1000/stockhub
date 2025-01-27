@@ -52,7 +52,7 @@ function Login() {
           draggable: true,
         });
         setTimeout(() => {
-          navigate('/dashboard');
+          navigate('/admindashboard');
         }, 3000);
       } else {
         toast.error(response.data.message, {
@@ -86,7 +86,7 @@ function Login() {
         });
         if (response.data.loggedIn) {
           // Redirect to login if not logged in
-          navigate("/dashboard");
+          navigate("/admindashboard");
         } 
       } catch (err) {
         console.error("Error fetching user profile:", err);

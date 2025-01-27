@@ -28,7 +28,7 @@ exports.validateLogin = async (req, res) => {
       req.session.username = user.username
       req.session.email = user.email
       req.session.role = user.role
-      req.session.id = user._id
+      req.session.Userid = user._id
       console.log(req.session);
       return res.status(200).json({ success: true, message: "Logged in as manager", role: "Admin" });
         // Store user data in session

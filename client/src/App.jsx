@@ -1,8 +1,9 @@
 import React from 'react'
 import { BrowserRouter as Router,Routes, Route, Link } from 'react-router-dom'
-import Login from './components/Accounts/Login'
-import Dashboard from './components/Dashboard'
-import ManagerLogin from './components/Accounts/ManagerLogin'
+import Login from './components/Accounts/Admin/Login'
+import Dashboard from './components/Pages/Admin/Dashboard.jsx'
+import ManagerLogin from './components/Accounts/Manager/ManagerLogin'
+import ManagerDashboard from "./components/Pages/Manager/Dashboard.jsx"
 
 
 function App() {
@@ -11,7 +12,8 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Login />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/admindashboard" element={<Dashboard />} />
+          <Route path="/managerdashboard" element={<ManagerDashboard />} />
           <Route path="/managerlogin" element={<ManagerLogin />} />
         </Routes>
       </Router>
