@@ -17,26 +17,25 @@ exports.validateLogin = async (req, res) => {
       return res.status(404).json({ success: false, message: "User does not exist" });
     }
     
-    // Compare plaintext password
-    if (user.password !== password) {
-      return res.status(401).json({ success: false, message: "Invalid password" });
-    }
-    
-    
-    // Check role and respond accordingly
     if (user.role === "Admin") {
+      if (user.password !== password) {
+        return res.status(401).json({ success: false, message: "Invalid password" });
+      }
       // Store user data in session
       req.session.username = user.username
       req.session.email = user.email
       req.session.role = user.role
       req.session.Userid = user._id
       console.log(req.session);
-      
       return res.status(200).json({ success: true, message: "Logged in as admin", role: "Admin" });
         
     } else {
       return res.status(403).json({ success: false, message: "Failed to log in as admin"});          
     }
+    // Compare plaintext password
+    
+    
+    // Check role and respond accordingly
   
   } catch (error) {
     console.error("Login error:", error);

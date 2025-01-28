@@ -28,6 +28,7 @@ function Dashboard() {
 
     fetchUserProfile();
   }, [navigate]);
+console.log(userProfile);
 
   const handleLogout = async () => {
     try {

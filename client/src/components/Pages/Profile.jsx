@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-function Dashboard() {
+function Profile() {
   const [userProfile, setUserProfile] = useState(null); // Initialize with null for clarity
   const [error, setError] = useState(null); // For error handling
   const navigate = useNavigate();
@@ -29,18 +29,6 @@ function Dashboard() {
     fetchUserProfile();
   }, [navigate]);
 
-  const handleLogout = async () => {
-    try {
-      await axios.get("http://localhost:8889/api/logout", {
-        withCredentials: true,
-      });
-      alert("You have successfully logged out.");
-      navigate("/"); // Redirect to login after logout
-    } catch (error) {
-      console.error("Error logging out:", error);
-      alert("Failed to log out. Please try again.");
-    }
-  };
 
   return (
     <div className="p-4">
@@ -66,13 +54,12 @@ function Dashboard() {
         <p>Loading user profile...</p>
       )}
       <button
-        onClick={handleLogout}
         className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
       >
-        Logout
+        Update Profile
       </button>
     </div>
   );
 }
 
-export default Dashboard;
+export default Profile;
