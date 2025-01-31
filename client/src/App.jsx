@@ -5,6 +5,9 @@ import Dashboard from './components/Pages/Dashboard.jsx'
 import ManagerLogin from './components/Accounts/Manager/ManagerLogin'
 import { Profiler } from 'react'
 import Profile from './components/Pages/Profile.jsx'
+import AdminRegister from "./components/Accounts/Admin/Register.jsx"
+import ManagerRegister from "./components/Accounts/Manager/Register.jsx"
+import Updateprofile from './components/Pages/Updateprofile.jsx'
 
 
 function App() {
@@ -16,6 +19,9 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/managerlogin" element={<ManagerLogin />} />
+          <Route path="/managerregister" element={<ManagerRegister />} />
+          <Route path="/adminregister" element={<AdminRegister />} />
+          <Route path="/updateprofile/:userId" element={<Updateprofile />} />
         </Routes>
       </Router>
     </div>

@@ -142,10 +142,11 @@ function Login() {
             Login
           </button>
         </div>
-        <div className="flex flex-row gap-10 text-blue-900">
-          <a href="#" className="ml-5">
+        <a href="#" className="ml-28 text-blue-900">
             Forgot password
           </a>
+        <div className="flex flex-row gap-14 text-blue-900">
+          <a className="ml-16" href="/adminregister">Register</a> 
           <a href="/managerlogin">Login as Manager</a>
         </div>
       </form>

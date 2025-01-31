@@ -44,3 +44,38 @@ exports.validateLogin = async (req, res) => {
     return res.status(500).json({ success: false, message: "An error occurred during login" });
   }
 };
+
+exports.registermanager = async(req,res)=>{
+  const { email, password,username,companyname,role } = req.body;
+   // Validate input
+   if (!email || !password) {
+    return res.status(400).json({ success: false, message: "Email and password are required" });
+  }
+  const checkuserexistence = await Manager.findOne({email}) 
+  const checkcompanyexistence = await Manager.findOne({companyname}) 
+
+  const newadmin = await new Manager(
+    {
+      username:req.body.username,
+      email:req.body.email,
+      password:req.body.password,
+      companyname:req.body.companyname,
+      role:req.body.role,
+    }
+  )
+  if (checkuserexistence) {
+    return res.status(400).json({success:false,message:"User already exists"}); 
+  }
+  if (!checkcompanyexistence) {
+    return res.status(400).json({success:false,message:"No Company found"}); 
+
+  newadmin.save()
+  .then(()=>{
+    res.status(201).send("Manager registered successfully");
+    
+  })
+  .catch((err)=>{
+    console.log(err);
+    
+  })
+}}

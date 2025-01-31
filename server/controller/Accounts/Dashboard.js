@@ -5,7 +5,9 @@ exports.dashboard = async (req, res) => {
         res.status(200).json({
           loggedIn: true,
           user: req.session.username,
+          company: req.session.companyname,
           email: req.session.email,
+          password: req.session.password,
           role: req.session.role,
           userId: req.session.Userid, // Return the correct MongoDB _id
         });

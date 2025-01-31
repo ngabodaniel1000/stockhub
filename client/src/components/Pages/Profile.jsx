@@ -1,11 +1,12 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Profile() {
-  const [userProfile, setUserProfile] = useState(null); // Initialize with null for clarity
+  const [userProfile, setUserProfile] = useState({}); // Initialize with null for clarity
   const [error, setError] = useState(null); // For error handling
   const navigate = useNavigate();
+
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -27,7 +28,7 @@ function Profile() {
     };
 
     fetchUserProfile();
-  }, [navigate]);
+  }, []);
 
 
   return (
@@ -53,11 +54,11 @@ function Profile() {
       ) : (
         <p>Loading user profile...</p>
       )}
-      <button
+      <Link to={`/updateprofile/${userProfile.userId}`}
         className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
       >
         Update Profile
-      </button>
+      </Link>
     </div>
   );
 }
