@@ -8,6 +8,11 @@ const ManagersModel = require("./model/Accounts/Managersmodel")
 const cors = require("cors")
 const session = require("express-session")
 const MongoStore = require("connect-mongo")
+const SettingsModel = require("./model/settings/Settings")
+const ProductsModel = require("./model/Products/Product")
+const SalesModel = require("./model/sales/Sales")
+const PurchaseModel = require("./model/purchase/Purchase")
+const CategoryModel = require("./model/category/category")
 
 // Middleware to parse JSON
 app.use(express.json());
