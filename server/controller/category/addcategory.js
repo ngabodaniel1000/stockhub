@@ -8,7 +8,7 @@ exports.addcategory = async(req,res)=>{
 
     // fetching data from body
     const categoryname = req.body.categoryname
-    const managerid = req.params.managerid
+    const managerid = req.session.Userid
 
     try {
 
@@ -22,10 +22,16 @@ exports.addcategory = async(req,res)=>{
             return res.status(400).json({message:"invalid id",success:false}) 
         }  
 
-        // check if category already exist in your category
-        const checkcategory = await Categorymodel.findOne({categoryname})
+        const checkcategory = await Categorymodel.findOne({ manager: managerid });
+
         if (checkcategory) {
-            return res.status(400).json({message:"category name already exist in your categories",success:false})
+            // Check if the category name already exists (case-insensitive)
+            if (checkcategory.categoryname.toLowerCase().includes(categoryname.toLowerCase())) {
+                return res.status(400).json({ 
+                    message: "Category name already exists in your categories", 
+                    success: false 
+                });
+            }
         }
 
         // adding new category
