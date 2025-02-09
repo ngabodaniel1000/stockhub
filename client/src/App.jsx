@@ -8,6 +8,8 @@ import Profile from './components/Pages/Profile.jsx'
 import AdminRegister from "./components/Accounts/Admin/Register.jsx"
 import ManagerRegister from "./components/Accounts/Manager/Register.jsx"
 import Updateprofile from './components/Pages/Updateprofile.jsx'
+import Category from './components/Category/Category.jsx'
+import AddCategory from './components/Category/AddCategory.jsx'
 
 
 function App() {
@@ -18,6 +20,8 @@ function App() {
           <Route path="/" element={<Login />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/category" element={<Category />} />
+          <Route path="/category/add" element={<AddCategory />} />
           <Route path="/managerlogin" element={<ManagerLogin />} />
           <Route path="/managerregister" element={<ManagerRegister />} />
           <Route path="/adminregister" element={<AdminRegister />} />
