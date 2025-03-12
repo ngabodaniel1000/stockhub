@@ -72,7 +72,7 @@ function Category() {
                         <td className='p-2 border-b border-gray-600' style={{ width: '10%' }}>{index + 1}</td>
                         <td className='p-2 border-b  text-center border-gray-600' style={{ width: '45%' }}>{cat.categoryname}</td>
                         <td className='p-2 border-b border-gray-600 text-center' style={{ width: '45%' }}>
-                            <a href="#" className='text-blue-500 hover:underline'>Delete</a>
+                            <a href={`/category/delete/${cat._id}`} className='text-blue-500 hover:underline'>Delete</a>
                             <a href="#" className='ml-4 text-blue-500 hover:underline'>Update</a>
                         </td>
                     </tr>

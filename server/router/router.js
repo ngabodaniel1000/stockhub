@@ -33,7 +33,7 @@ router.post('/account/managerregister',ManagerLogincontroller.registermanager)
 // all routes required in category operation
 router.post("/category/add",addcategorycontoller.addcategory)
 router.get("/category/view",viewcategorycontoller.viewcategory)
-router.post("/category/delete/:categoryId",deleteCategorycontroller.deleteCategory)
+router.delete("/category/delete/:categoryId",deleteCategorycontroller.deleteCategory)
 router.post("/category/update/:categoryId",UpdateCategorycontroller.updateCategory)
 
 // exporting routers
