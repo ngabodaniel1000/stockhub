@@ -11,6 +11,8 @@ import Updateprofile from './components/Pages/Updateprofile.jsx'
 import Category from './components/Category/Category.jsx'
 import AddCategory from './components/Category/AddCategory.jsx'
 import DeleteCategory from './components/Category/deleteCategory.jsx'
+import UpdateCategory from './components/Category/UpdateCategory.jsx'
+import ViewSingleCategory from './components/Category/ViewSingleCategory.jsx'
 
 
 function App() {
@@ -22,7 +24,10 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/category" element={<Category />} />
+          <Route path="/category/viewcategory/:categoryid" element={<ViewSingleCategory />} />
+          <Route path="/category/update/:categoryid" element={<UpdateCategory />} />
           <Route path="/category/delete/:categoryid" element={<DeleteCategory />} />
+          <Route path="/category/update/:categoryid" element={<UpdateCategory />} />
           <Route path="/category/add" element={<AddCategory />} />
           <Route path="/managerlogin" element={<ManagerLogin />} />
           <Route path="/managerregister" element={<ManagerRegister />} />

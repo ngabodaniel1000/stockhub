@@ -12,7 +12,8 @@ const Updateprofile = require("../controller/Accounts/Updateprofilecontroller")
 
 // importing controller used in category operation
 const addcategorycontoller = require("../controller/category/addcategory")
-const viewcategorycontoller = require("../controller/category/allcategory")
+const viewsinglecategorycontroller = require("../controller/category/viewsinglecategory")
+const viewcategorycontroller = require("../controller/category/allcategory")
 const deleteCategorycontroller = require("../controller/category/removecategory")
 const UpdateCategorycontroller = require("../controller/category/updatecategory")
 
@@ -32,9 +33,10 @@ router.post('/account/managerregister',ManagerLogincontroller.registermanager)
 
 // all routes required in category operation
 router.post("/category/add",addcategorycontoller.addcategory)
-router.get("/category/view",viewcategorycontoller.viewcategory)
+router.get("/category/view",viewcategorycontroller.viewcategory)
+router.get("/category/viewsingleitem/:categoryId",viewsinglecategorycontroller.viewsinglecategory)
 router.delete("/category/delete/:categoryId",deleteCategorycontroller.deleteCategory)
-router.post("/category/update/:categoryId",UpdateCategorycontroller.updateCategory)
+router.put("/category/update/:categoryId",UpdateCategorycontroller.updateCategory)
 
 // exporting routers
 module.exports = router

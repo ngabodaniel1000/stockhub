@@ -21,7 +21,6 @@ function DeleteCategory() {
                 else{
                     alert(response.data.message)
                 }
-
             }
             catch (error) {
                 console.error("Error while deleting category:", error)
