@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 
 const schema = new mongoose.Schema({
     language:{type:String, required:false,default:"english"},
+    stockminlevel:{type:Number, required:false,default:10},
     currency:{type:String, required:false,default:"frw"},
     darkmode:{type:Boolean, required:true,default:false},
     manager:{type:mongoose.Schema.Types.ObjectId,ref:"Managers"}  

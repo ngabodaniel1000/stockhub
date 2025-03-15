@@ -17,6 +17,9 @@ const viewcategorycontroller = require("../controller/category/allcategory")
 const deleteCategorycontroller = require("../controller/category/removecategory")
 const UpdateCategorycontroller = require("../controller/category/updatecategory")
 
+// importing controller used in product operation
+const addproductcontroller = require("../controller/products/addproduct")
+
 
 // make all routes
 router.get('/', (req, res) => res.send('Hello World!'))
@@ -37,6 +40,9 @@ router.get("/category/view",viewcategorycontroller.viewcategory)
 router.get("/category/viewsingleitem/:categoryId",viewsinglecategorycontroller.viewsinglecategory)
 router.delete("/category/delete/:categoryId",deleteCategorycontroller.deleteCategory)
 router.put("/category/update/:categoryId",UpdateCategorycontroller.updateCategory)
+
+// all routes required in product operation
+router.post("/product/add",addproductcontroller.addproduct)
 
 // exporting routers
 module.exports = router

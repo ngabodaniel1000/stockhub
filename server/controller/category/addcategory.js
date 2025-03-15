@@ -12,7 +12,7 @@ exports.addcategory = async(req,res)=>{
 
     try {
 
-        // check if all data was snt in body
+        // check if all data was sent in body
         if (!categoryname || !managerid) {
             return res.status(400).json({ success: false, message: "Category name and manager id are required" });
           }

@@ -8,7 +8,7 @@ const schema = new mongoose.Schema({
     productname:{type:String, required:true},
     price:{type:Number ,required:true},
     quantity:{type:Number, required:true,},
-    total:{type:Number, required:true,unique:true},
+    total:{type:Number, required:true},
     category:{type:mongoose.Schema.Types.ObjectId,ref:"category"},
     manager:{type:mongoose.Schema.Types.ObjectId,ref:"Managers"}  
 },{
