@@ -22,6 +22,7 @@ exports.addcategory = async(req,res)=>{
             return res.status(400).json({message:"invalid id",success:false}) 
         }  
 
+        // check if category name already exists
         const checkcategory = await Categorymodel.findOne({ manager: managerid });
 
         if (checkcategory) {
@@ -39,8 +40,10 @@ exports.addcategory = async(req,res)=>{
             categoryname:categoryname,
             manager:managerid
         })
+        // save new category
         addcategory.save()
         .then(()=>{
+         // return success response
             res.status(201).json({message:"new category was successfully added",success:true})
         })
         .catch((err)=>{

@@ -7,8 +7,7 @@ exports.registeradmin= async(req,res)=>{
    if (!email || !password) {
     return res.status(400).json({ success: false, message: "Email and password are required" });
   }
-  const checkuserexistence = await Admin.findOne({email}) 
-  const checkcompanyexistence = await Admin.findOne({companyname}) 
+  // crate new admin account
   const newadmin = await new Admin(
     {
       username:req.body.username,
@@ -18,13 +17,17 @@ exports.registeradmin= async(req,res)=>{
       role:req.body.role,
     }
   )
+  // check if user already exists with email
+  const checkuserexistence = await Admin.findOne({email}) 
   if (checkuserexistence) {
     return res.status(400).json({success:false,message:"User already exists"}); 
   }
+  // check if company name already exists
+  const checkcompanyexistence = await Admin.findOne({companyname}) 
   if (checkcompanyexistence) {
     return res.status(400).json({success:false,message:"Company name already taken"}); 
   }
-  
+  // save new admin account in mongodb db
   newadmin.save()
   .then(()=>{
     res.status(201).json({message:"Admin registered successfully",success:true});
@@ -51,7 +54,7 @@ exports.validateLogin = async (req, res) => {
     if (!user) {
       return res.status(404).json({ success: false, message: "User does not exist" });
     }
-    
+    // check if user role is admin
     if (user.role === "Admin") {
       if (user.password !== password) {
         return res.status(401).json({ success: false, message: "Invalid password" });

@@ -51,9 +51,7 @@ exports.registermanager = async(req,res)=>{
    if (!email || !password) {
     return res.status(400).json({ success: false, message: "Email and password are required" });
   }
-  const checkuserexistence = await Manager.findOne({email}) 
-  const checkcompanyexistence = await Manager.findOne({companyname}) 
-
+// create new manager account
   const newadmin = await new Manager(
     {
       username:req.body.username,
@@ -63,12 +61,17 @@ exports.registermanager = async(req,res)=>{
       role:req.body.role,
     }
   )
+  // check if user email already exist
+  const checkuserexistence = await Manager.findOne({email}) 
   if (checkuserexistence) {
     return res.status(400).json({success:false,message:"User already exists"}); 
   }
+  // check if company name was taken
+  const checkcompanyexistence = await Manager.findOne({companyname}) 
   if (!checkcompanyexistence) {
     return res.status(400).json({success:false,message:"No Company found"}); 
 
+  // save new manager account in mongodb db
   newadmin.save()
   .then(()=>{
     res.status(201).send("Manager registered successfully");

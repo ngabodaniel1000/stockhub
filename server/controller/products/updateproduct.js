@@ -8,8 +8,6 @@ exports.updateProduct = async (req, res) => {
      // fetching data from body
      const productname = req.body.productname
      const productprice = req.body.price
-     const productquantity = req.body.quantity
-     const producttotal = req.body.total
      const productcategory = req.body.category
      const managerid = req.session.Userid
 
@@ -41,8 +39,6 @@ exports.updateProduct = async (req, res) => {
             productname:productname,
             price:productprice,
             quantity:productquantity,
-            total:producttotal,
-            manager:managerid,
             category:productcategory }, // Update the Product name
             { new: true } // Return the updated document
         );

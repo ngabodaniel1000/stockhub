@@ -9,15 +9,13 @@ exports.addproduct = async(req,res)=>{
     // fetching data from body
     const productname = req.body.productname
     const productprice = req.body.price
-    const productquantity = req.body.quantity
-    const producttotal = req.body.total
     const productcategory = req.body.category
     const managerid = req.session.Userid
 
     try {
 
         // check if all data was sent in body
-        if (!productname || !managerid || !productprice || !productquantity || !producttotal || !productcategory) {
+        if (!productname || !managerid || !productprice || !productcategory) {
             return res.status(400).json({ success: false, message: "fill all required fields" });
           }
           
@@ -46,11 +44,10 @@ exports.addproduct = async(req,res)=>{
         const addproduct = await new productmodel({
             productname:productname,
             price:productprice,
-            quantity:productquantity,
-            total:producttotal,
             manager:managerid,
             category:productcategory
         })
+        // save new product in mongodb
         addproduct.save()
         .then(()=>{
             res.status(201).json({message:"new product was successfully added",success:true})
@@ -58,7 +55,7 @@ exports.addproduct = async(req,res)=>{
         .catch((err)=>{
             res.status(500).json({message:err,success:false}) 
         })
-        
+        // catch any error that occurs
     } catch (error) {
        res.json({message:error,success:false}) 
     }
