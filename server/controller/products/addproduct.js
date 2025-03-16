@@ -29,18 +29,7 @@ exports.addproduct = async(req,res)=>{
         if (!mongoose.Types.ObjectId.isValid(managerid)) {
             return res.status(400).json({message:"invalid category id",success:false}) 
         }  
-
-        // check if category id is included in your categories
-        const Categorymodel = require("../../model/category/category");
-        const checkcategory = await Categorymodel.findById({manager: managerid})
-        if(checkcategory){
-            if(checkcategory.manager.toLowerCase().includes(managerid.toLowerCase())){
-                return res.status(400).json({message:"category not found in your categories",success:false})
-            }
-        }
-
-
-        
+     
         // Check if the product name already exists (case-insensitive)
         const checkproduct = await productmodel.findOne({ manager: managerid });
 

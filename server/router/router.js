@@ -19,7 +19,8 @@ const UpdateCategorycontroller = require("../controller/category/updatecategory"
 
 // importing controller used in product operation
 const addproductcontroller = require("../controller/products/addproduct")
-
+const deleteproductcontroller = require("../controller/products/deleteproduct")
+const UpdateProductcontroller = require("../controller/products/updateproduct")
 
 // make all routes
 router.get('/', (req, res) => res.send('Hello World!'))
@@ -43,7 +44,8 @@ router.put("/category/update/:categoryId",UpdateCategorycontroller.updateCategor
 
 // all routes required in product operation
 router.post("/product/add",addproductcontroller.addproduct)
-
+router.delete("/product/delete/:ProductId",deleteproductcontroller.deleteProduct)
+router.put("/product/update/:ProductId",UpdateProductcontroller.updateProduct)
 // exporting routers
 module.exports = router
 
