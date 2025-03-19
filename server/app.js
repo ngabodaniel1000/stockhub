@@ -13,6 +13,7 @@ const ProductsModel = require("./model/Products/Product")
 const SalesModel = require("./model/sales/Sales")
 const PurchaseModel = require("./model/purchase/Purchase")
 const CategoryModel = require("./model/category/category")
+const CompanyModel = require("./model/company/company")
 
 // Middleware to parse JSON
 app.use(express.json());

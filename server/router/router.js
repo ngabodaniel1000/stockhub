@@ -1,7 +1,9 @@
 // importing modules
 const express = require('express')
 const router = express.Router()
-
+// importing company controller
+const Companyaddcontroller = require('../controller/company/addcompanycontroller')
+const ensureAuthenticatedAdmin = require("../controller/company/Companymiddleware")
 // importing controller used in login system
 const AdminLogincontroller = require('../controller/Accounts/Admincontroller')
 const ManagerLogincontroller = require('../controller/Accounts/Managercontoller')
@@ -9,6 +11,7 @@ const Logoutcontroller = require("../controller/Accounts/logout")
 const Authmiddleware = require("../controller/Accounts/authmiddleware")
 const Dashboardcontroller = require("../controller/Accounts/Dashboard")
 const Updateprofile = require("../controller/Accounts/Updateprofilecontroller")
+const Acceptmanager = require("../controller/Accounts/Acceptmanager")
 
 // importing controller used in category operation
 const addcategorycontoller = require("../controller/category/addcategory")
@@ -24,10 +27,13 @@ const viewproductcontroller = require("../controller/products/viewproducts")
 const viewsingleproductcontroller = require("../controller/products/viewsingleproduct")
 const UpdateProductcontroller = require("../controller/products/updateproduct")
 
-// make all routes
+// make basic routes
 router.get('/', (req, res) => res.send('Hello World!'))
 router.get('/home', (req, res) => res.send('Home page'))
 router.get("/logout",Authmiddleware.ensureAuthenticated,Logoutcontroller.logout)
+
+// all routes required for company
+router.post('/company/add',ensureAuthenticatedAdmin.ensureAuthenticated,ensureAuthenticatedAdmin.isAdmin,Companyaddcontroller.addCompany)
 
 // all routes required in login system
 router.get("/dashboard",  Dashboardcontroller.dashboard);
@@ -36,6 +42,8 @@ router.post('/account/adminregister', AdminLogincontroller.registeradmin)
 router.post('/account/managerlogin',ManagerLogincontroller.validateLogin)
 router.put("/account/updateprofile/:managerid",Updateprofile.updateprofile)
 router.post('/account/managerregister',ManagerLogincontroller.registermanager)
+router.post('/account/acceptmanager/:managerId',Acceptmanager.acceptManager)
+router.get('/account/viewpendingmanager',Acceptmanager.getPendingManagers)
 
 // all routes required in category operation
 router.post("/category/add",addcategorycontoller.addcategory)

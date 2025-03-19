@@ -5,4 +5,4 @@ exports.ensureAuthenticated = (req, res, next) => {
     } else {
         res.status(403).json({message:"Unauthorized to this api"});
     }
-};
+}

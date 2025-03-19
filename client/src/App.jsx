@@ -13,6 +13,7 @@ import AddCategory from './components/Category/AddCategory.jsx'
 import DeleteCategory from './components/Category/deleteCategory.jsx'
 import UpdateCategory from './components/Category/UpdateCategory.jsx'
 import ViewSingleCategory from './components/Category/ViewSingleCategory.jsx'
+import Companymanage from './components/Pages/Companymanage.jsx'
 
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
           <Route path="/category/add" element={<AddCategory />} />
           <Route path="/managerlogin" element={<ManagerLogin />} />
           <Route path="/managerregister" element={<ManagerRegister />} />
+          <Route path="/notification" element={<Companymanage />} />
           <Route path="/adminregister" element={<AdminRegister />} />
           <Route path="/updateprofile/:userId" element={<Updateprofile />} />
         </Routes>

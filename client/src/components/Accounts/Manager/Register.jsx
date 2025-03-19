@@ -5,23 +5,20 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function Register() {
-   // State to store form data
-   const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState({
     email: "",
     password: "",
-    role:"Admin",
-    companyname:"",
-    username:""
+    username: "",
+    company: "" // Keep this as we need company ID for manager registration
   });
 
   const navigate = useNavigate();
 
-  // Function to handle Register
   const handleRegister = async (event) => {
     event.preventDefault();
 
     // Basic form validation
-    if (!formData.email || !formData.password || !formData.companyname || !formData.username || !formData.role) {
+    if (!formData.email || !formData.password || !formData.username || !formData.company) {
       toast.error("Please fill in all fields", {
         position: "top-right",
         autoClose: 5000,
@@ -35,13 +32,12 @@ function Register() {
 
     try {
       const response = await axios.post(
-        "http://localhost:8889/api/account/adminregister",
+        "http://localhost:8889/api/account/managerregister",
         {
           email: formData.email,
           password: formData.password,
-          role:formData.role,
-          companyname:formData.companyname,
-          username:formData.username
+          username: formData.username,
+          company: formData.company
         },
         { withCredentials: true }
       );
@@ -59,29 +55,13 @@ function Register() {
           navigate('/managerlogin');
         }, 3000);
       } else {
-        toast.error(response.data.message, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-        });
+        toast.error(response.data.message);
       }
     } catch (error) {
-      toast.error(
-        error.response?.data?.message || "An error occurred during Register",
-        {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-        }
-      );
+      toast.error(error.response?.data?.message || "An error occurred during registration");
     }
   };
+
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
@@ -100,7 +80,6 @@ function Register() {
     fetchUserProfile();
   }, []);
 
-
   return (
     <div className="flex items-center justify-center min-h-screen">
       <ToastContainer />
@@ -117,38 +96,30 @@ function Register() {
             type="text"
             name="username"
             value={formData.username}
-            onChange={(e) =>
-              setFormData({ ...formData, username: e.target.value })
-            }
-            className="mt-4 w-full h-[32px] lg:h-[40px] bg-gray-100"
-            // minLength={8}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={(e) =>
-              setFormData({ ...formData, email: e.target.value })
-            }
+            onChange={(e) => setFormData({ ...formData, username: e.target.value })}
             className="mt-4 w-full h-[32px] lg:h-[40px] bg-gray-100"
             required
           />
         </div>
         <div className="flex flex-col">
-          <label htmlFor="companyname">Company name</label>
+          <label htmlFor="email">Email</label>
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+            className="mt-4 w-full h-[32px] lg:h-[40px] bg-gray-100"
+            required
+          />
+        </div>
+        <div className="flex flex-col">
+          <label htmlFor="company">Company ID</label>
           <input
             type="text"
-            name="companyname"
-            value={formData.companyname}
-            onChange={(e) =>
-              setFormData({ ...formData, companyname: e.target.value })
-            }
+            name="company"
+            value={formData.company}
+            onChange={(e) => setFormData({ ...formData, company: e.target.value })}
             className="mt-4 w-full h-[32px] lg:h-[40px] bg-gray-100"
-            // minLength={8}
             required
           />
         </div>
@@ -158,15 +129,12 @@ function Register() {
             type="password"
             name="password"
             value={formData.password}
-            onChange={(e) =>
-              setFormData({ ...formData, password: e.target.value })
-            }
+            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
             className="mt-4 w-full h-[32px] lg:h-[40px] bg-gray-100"
             minLength={8}
             required
           />
-          </div>
-          
+        </div>
         <div className="flex flex-col">
           <button
             type="submit"
@@ -176,8 +144,8 @@ function Register() {
           </button>
         </div>
         <a href="#" className="ml-28 text-blue-900">
-            Forgot password
-          </a>
+          Forgot password
+        </a>
         <div className="flex flex-row gap-14 text-blue-900">
           <a className="ml-16" href="/managerlogin">Login</a> 
           <a href="/adminregister">Register as Admin</a>

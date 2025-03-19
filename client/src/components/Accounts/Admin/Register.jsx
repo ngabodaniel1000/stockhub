@@ -9,9 +9,7 @@ function Register() {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-    role:"Admin",
-    companyname:"",
-    username:""
+    username: ""
   });
 
   const navigate = useNavigate();
@@ -21,7 +19,7 @@ function Register() {
     event.preventDefault();
 
     // Basic form validation
-    if (!formData.email || !formData.password || !formData.companyname || !formData.username || !formData.role) {
+    if (!formData.email || !formData.password || !formData.username) {
       toast.error("Please fill in all fields", {
         position: "top-right",
         autoClose: 5000,
@@ -39,9 +37,7 @@ function Register() {
         {
           email: formData.email,
           password: formData.password,
-          role:formData.role,
-          companyname:formData.companyname,
-          username:formData.username
+          username: formData.username
         },
         { withCredentials: true }
       );
@@ -59,27 +55,10 @@ function Register() {
           navigate('/');
         }, 3000);
       } else {
-        toast.error(response.data.message, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-        });
+        toast.error(response.data.message);
       }
     } catch (error) {
-      toast.error(
-        error.response?.data?.message || "An error occurred during Register",
-        {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-        }
-      );
+      toast.error(error.response?.data?.message || "An error occurred during registration");
     }
   };
   useEffect(() => {
@@ -111,43 +90,24 @@ function Register() {
           <h1 className="text-center font-bold text-xl">Register as Admin</h1>
         </div>
         <div className="flex flex-col">
-        <div className="flex flex-col">
           <label htmlFor="Username">Username</label>
           <input
             type="text"
             name="username"
             value={formData.username}
-            onChange={(e) =>
-              setFormData({ ...formData, username: e.target.value })
-            }
-            className="mt-4 w-full h-[32px] lg:h-[40px] bg-gray-100"
-            // minLength={8}
-            required
-          />
-        </div>
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={(e) =>
-              setFormData({ ...formData, email: e.target.value })
-            }
+            onChange={(e) => setFormData({ ...formData, username: e.target.value })}
             className="mt-4 w-full h-[32px] lg:h-[40px] bg-gray-100"
             required
           />
         </div>
         <div className="flex flex-col">
-          <label htmlFor="companyname">Company name</label>
+          <label htmlFor="email">Email</label>
           <input
-            type="text"
-            name="companyname"
-            value={formData.companyname}
-            onChange={(e) =>
-              setFormData({ ...formData, companyname: e.target.value })
-            }
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             className="mt-4 w-full h-[32px] lg:h-[40px] bg-gray-100"
-            // minLength={8}
             required
           />
         </div>
@@ -157,15 +117,12 @@ function Register() {
             type="password"
             name="password"
             value={formData.password}
-            onChange={(e) =>
-              setFormData({ ...formData, password: e.target.value })
-            }
+            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
             className="mt-4 w-full h-[32px] lg:h-[40px] bg-gray-100"
             minLength={8}
             required
           />
-          </div>
-          
+        </div>
         <div className="flex flex-col">
           <button
             type="submit"
@@ -175,10 +132,10 @@ function Register() {
           </button>
         </div>
         <a href="#" className="ml-28 text-blue-900">
-            Forgot password
-          </a>
+          Forgot password
+        </a>
         <div className="flex flex-row gap-14 text-blue-900">
-          <a className="ml-16" href="/">Login </a> 
+          <a className="ml-16" href="/">Login</a> 
           <a href="/managerregister">Register as Manager</a>
         </div>
       </form>

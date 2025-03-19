@@ -1,5 +1,7 @@
 // Import Manager model
+const { default: mongoose } = require("mongoose");
 const Manager = require("../../model/Accounts/Managersmodel");
+const Company = require("../../model/company/company");
 
 // Function to validate login
 exports.validateLogin = async (req, res) => {
@@ -22,63 +24,112 @@ exports.validateLogin = async (req, res) => {
       return res.status(401).json({ success: false, message: "Invalid password" });
     }
 
+    // Check role and active status
+    if (user.role === "manager") {
+      // Check if account is active
+      if (!user.active) {
+        return res.status(403).json({ 
+          success: false, 
+          message: "Account is pending activation. Please contact your admin." 
+        });
+      }
 
-    // Check role and respond accordingly
-    if (user.role === "Manager") {
-      req.session.username = user.username
-      req.session.email = user.email
-      req.session.role = user.role
-      req.session.Userid = user._id
-      console.log(req.session);
-      return res.status(200).json({ success: true, message: "Logged in as manager", role: "Admin" });
-        // Store user data in session
-    } else {
-      return res.status(200).json({ success: false, message: "Failed to log in as manager", });
+      // Store user data in session
+      req.session.username = user.username;
+      req.session.email = user.email;
+      req.session.role = user.role;
+      req.session.Userid = user._id;
+      req.session.company = user.company;
       
-             
-        // Store user data in session
+      return res.status(200).json({ 
+        success: true, 
+        message: "Logged in as manager", 
+        role: "Manager" 
+      });
+    } else {
+      return res.status(403).json({ 
+        success: false, 
+        message: "Failed to log in as manager" 
+      });
     }
   
   } catch (error) {
     console.error("Login error:", error);
-    return res.status(500).json({ success: false, message: "An error occurred during login" });
+    return res.status(500).json({ 
+      success: false, 
+      message: "An error occurred during login" 
+    });
   }
 };
 
-exports.registermanager = async(req,res)=>{
-  const { email, password,username,companyname,role } = req.body;
-   // Validate input
-   if (!email || !password) {
-    return res.status(400).json({ success: false, message: "Email and password are required" });
+exports.registermanager = async(req, res) => {
+  const { email, password, username, company } = req.body;
+  
+  // Validate input
+  if (!email || !password || !username || !company) {
+    return res.status(400).json({ 
+      success: false, 
+      message: "Email, password, username and company are required" 
+    });
   }
-// create new manager account
-  const newadmin = await new Manager(
-    {
-      username:req.body.username,
-      email:req.body.email,
-      password:req.body.password,
-      companyname:req.body.companyname,
-      role:req.body.role,
-    }
-  )
-  // check if user email already exist
-  const checkuserexistence = await Manager.findOne({email}) 
-  if (checkuserexistence) {
-    return res.status(400).json({success:false,message:"User already exists"}); 
-  }
-  // check if company name was taken
-  const checkcompanyexistence = await Manager.findOne({companyname}) 
-  if (!checkcompanyexistence) {
-    return res.status(400).json({success:false,message:"No Company found"}); 
 
-  // save new manager account in mongodb db
-  newadmin.save()
-  .then(()=>{
-    res.status(201).send("Manager registered successfully");
-    
-  })
-  .catch((err)=>{
+  try {
+    // check if user email already exists
+    const checkuserexistence = await Manager.findOne({email});
+    if (checkuserexistence) {
+      return res.status(400).json({
+        success: false,
+        message: "User already exists"
+      }); 
+    }
+    if (!mongoose.isValidObjectId(company)) {
+      return res.status(400).json({
+        success: false,
+        message: "Enter valid id"
+      }); 
+    }
+
+    // check if company exists
+    const companyExists = await Company.findById(company);
+    if (!companyExists) {
+      return res.status(400).json({
+        success: false,
+        message: "Company not found"
+      }); 
+    }
+
+    // create new manager account
+    const newManager = new Manager({
+      username,
+      email,
+      password,
+      company,    // Reference to company ID
+      role: 'manager',  // Set role as manager by default
+      active: false    // Set initially as inactive, requiring admin approval
+    });
+
+    // Save the manager
+    const savedManager = await newManager.save();
+
+    // Add manager to company's managers array
+    companyExists.managers.push({ 
+      id: savedManager._id,
+      notificationStatus: 'unread' // Add notification status
+    });
+    await companyExists.save();
+
+    res.status(201).json({
+      success: true,
+      message: "Manager registered successfully. Waiting for admin approval.",
+      manager: savedManager
+    });
+
+  } catch (err) {
     console.log(err);
-    
-  })
-}}
+    res.status(500).json({
+      success: false,
+      message: "Error registering manager",
+      error: err.message
+    });
+  }
+}
