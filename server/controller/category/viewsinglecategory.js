@@ -5,9 +5,10 @@ const Categorymodel = require("../../model/category/category");
 exports.viewsinglecategory = async (req, res) => {
     const { categoryId } = req.params; // Get category ID from request parameters
     const managerid = req.session.Userid; // Get manager ID from session
+    const {companyId} = req.params
     try {
-        // Find categories for the given manager
-        const mycategory = await Categorymodel.findOne({ manager:managerid,_id: categoryId });
+        // Find categories for the given company
+        const mycategory = await Categorymodel.findOne({ company:companyId,_id: categoryId });
 
         if (mycategory) {
             // If categories are found, return them

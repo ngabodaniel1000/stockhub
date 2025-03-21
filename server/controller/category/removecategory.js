@@ -3,12 +3,13 @@ const Categorymodel = require("../../model/category/category");
 
 // Controller to delete a specific category
 exports.deleteCategory = async (req, res) => {
-    const { categoryId } = req.params; // Get category ID from request parameters
+    const categoryId = req.body.categoryId; // Get category ID from request parameters
     const managerid = req.session.Userid; // Get manager ID from session
+    const {companyId} = req.params
 
     try {
         // Find the category by ID and ensure it belongs to the logged-in manager
-        const category = await Categorymodel.findOne({ _id: categoryId, manager: managerid });
+        const category = await Categorymodel.findOne({ _id: categoryId, company: companyId });
 
         if (!category) {
             // If the category doesn't exist or doesn't belong to the manager

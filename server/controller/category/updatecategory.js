@@ -19,13 +19,13 @@ exports.updateCategory = async (req, res) => {
             });
         }
 
-        // Check if the category belongs to the logged-in manager
-        if (category.manager.toString() !== managerid) {
-            return res.status(403).json({ 
-                message: "You do not have permission to update this category", 
-                success: false 
-            });
-        }
+        // // Check if the category belongs to the logged-in manager
+        // if (category.man.toString() !== managerid) {
+        //     return res.status(403).json({ 
+        //         message: "You do not have permission to update this category", 
+        //         success: false 
+        //     });
+        // }
 
         // Update the category
         const updatedCategory = await Categorymodel.findByIdAndUpdate(

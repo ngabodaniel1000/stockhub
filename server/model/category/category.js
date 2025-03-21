@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 
 const schema = new mongoose.Schema({
     categoryname:{type:String, required:true},
-    manager:{type:mongoose.Schema.Types.ObjectId,ref:"Managers"}  
+    company:{type:mongoose.Schema.Types.ObjectId,ref:"Companies"}  
 },{
     timestamps: true
 }  

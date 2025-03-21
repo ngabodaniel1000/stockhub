@@ -46,11 +46,11 @@ router.post('/account/acceptmanager/:managerId',Acceptmanager.acceptManager)
 router.get('/account/viewpendingmanager',Acceptmanager.getPendingManagers)
 
 // all routes required in category operation
-router.post("/category/add",addcategorycontoller.addcategory)
-router.get("/category/view",viewcategorycontroller.viewcategory)
-router.get("/category/viewsingleitem/:categoryId",viewsinglecategorycontroller.viewsinglecategory)
-router.delete("/category/delete/:categoryId",deleteCategorycontroller.deleteCategory)
-router.put("/category/update/:categoryId",UpdateCategorycontroller.updateCategory)
+router.post("/category/add/:companyId",Authmiddleware.ensureAuthenticated,addcategorycontoller.addcategory)
+router.get("/category/view/:companyId",Authmiddleware.ensureAuthenticated,viewcategorycontroller.viewcategory)
+router.get("/category/viewsingleitem/:categoryId",Authmiddleware.ensureAuthenticated,viewsinglecategorycontroller.viewsinglecategory)
+router.delete("/category/delete/:companyId",deleteCategorycontroller.deleteCategory)
+router.put("/category/update/:CompanyId/:categoryId",UpdateCategorycontroller.updateCategory)
 
 // all routes required in product operation
 router.post("/product/add",addproductcontroller.addproduct)
