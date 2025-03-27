@@ -9,6 +9,7 @@ exports.addcategory = async(req,res)=>{
     // fetching data from body
     const categoryname = req.body.categoryname
     const {companyId} = req.params
+    const managerId = req.session.Userid; // Get manager ID from session
 
     try {
 
@@ -29,6 +30,18 @@ exports.addcategory = async(req,res)=>{
                         message: "Company doesnot exists"
                     });
                 }
+
+                 // Check if user works for the company
+        const managerExists = existingCompany.managers.some(manager => 
+            manager.id.toString() === managerId.toString()
+        );
+
+        if (!managerExists) {
+            return res.status(403).json({
+                success: false,
+                message: "You don't have access to this company"
+            });
+        }
 
         // check if category name already exists
         const checkcategory = await Categorymodel.findOne({ company: companyId });

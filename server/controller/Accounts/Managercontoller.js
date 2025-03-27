@@ -113,7 +113,7 @@ exports.registermanager = async(req, res) => {
 
     // Add manager to company's managers array
     companyExists.managers.push({ 
-      id: savedManager._id,
+      managerid: savedManager._id,
       notificationStatus: 'unread' // Add notification status
     });
     await companyExists.save();

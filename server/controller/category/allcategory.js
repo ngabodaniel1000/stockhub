@@ -4,30 +4,35 @@ const CompanyModel = require("../../model/company/company")
 
 // Controller for viewing all categories for a manager
 exports.viewcategory = async (req, res) => {
-    const {companyId} = req.params
-    const managerid = req.session.Userid; // Get manager ID from session
+    const {companyId} = req.params;
+    const managerId = req.session.Userid; // Get manager ID from session
 
     try {
+        // Check if company exists
+        const existingCompany = await CompanyModel.findOne({ _id: companyId });
+        if (!existingCompany) {
+            return res.status(400).json({
+                success: false,
+                message: "Company does not exist"
+            });
+        }
+
+        // Check if user works for the company
+        const managerExists = existingCompany.managers.some(manager => 
+            manager.id.toString() === managerId.toString()
+        );
+
+        if (!managerExists) {
+            return res.status(403).json({
+                success: false,
+                message: "You don't have access to this company"
+            });
+        }
+
+        // Find categories for the given company
+        const mycategory = await Categorymodel.find({ company: companyId });
         
-          // Check if company exists
-          const existingCompany = await CompanyModel.findOne({ _id:companyId });
-          if (!existingCompany) {
-              return res.status(400).json({
-                  success: false,
-                  message: "Company doesnot exists"
-              });
-          }
-          // check if user work for the company
-        // const managerwork= await CompanyModel.findOne({managers:managerid})
-        // if(managerwork){
-        // return res.status(400).json({
-        //     success:false,
-        //     message:"you don't have access to this company"
-        // })
-        // }
-          // Find categories for the given manager
-        const mycategory = await Categorymodel.find({ company:companyId });
-        if (mycategory) {
+        if (mycategory.length > 0) {
             // If categories are found, return them
             return res.status(200).json({ 
                 allcategories: mycategory, 
@@ -36,7 +41,7 @@ exports.viewcategory = async (req, res) => {
         } else {
             // If no categories are found return a message
             return res.status(404).json({ 
-                message: "No categories found for this manager", 
+                message: "No categories found for this company", 
                 success: false 
             });
         }

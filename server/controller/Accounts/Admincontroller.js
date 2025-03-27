@@ -48,7 +48,7 @@ exports.registeradmin = async(req, res) => {
     const savedAdmin = await newadmin.save();
 
     // Update company's managers array with the new admin
-    savedCompany.managers.push({ id: savedAdmin._id });
+    savedCompany.managers.push({ managerid: savedAdmin._id });
     await savedCompany.save();
 
     res.status(201).json({
@@ -94,7 +94,7 @@ exports.validateLogin = async (req, res) => {
       req.session.password = user.password
       req.session.role = user.role
       req.session.Userid = user._id
-      req.session.companyname = user.company;
+      req.session.company = user.company;
       console.log(req.session);
       return res.status(200).json({ success: true, message: "Logged in as admin", role: "Admin" });
         

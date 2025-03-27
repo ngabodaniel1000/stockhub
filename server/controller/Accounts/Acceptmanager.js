@@ -23,21 +23,16 @@ exports.acceptManager = async (req, res) => {
             });
         }
 
-        // Find the admin's company
-        const adminCompany = await Company.findOne({
-            managers: { 
-                $elemMatch: { 
-                    id: req.session.Userid 
-                }
-            }
-        });
-
-        if (!adminCompany) {
-            return res.status(404).json({
-                success: false,
-                message: "Admin's company not found"
-            });
-        }
+       // Find the admin's company
+       const adminCompany = await Company.findOne({ ownername:req.session.username })
+        
+       if (!adminCompany) {
+           return res.status(404).json({
+               success: true,
+               message: "Admin's company not found"
+           })        
+       }
+        
 
         // Find the manager
         const manager = await Manager.findById(managerId);
@@ -48,13 +43,14 @@ exports.acceptManager = async (req, res) => {
             });
         }
 
-        // Check if the manager belongs to admin's company
-        if (manager.company.toString() !== adminCompany._id.toString()) {
-            return res.status(403).json({
-                success: false,
-                message: "You don't have permission to activate this manager"
-            });
-        }
+        
+     // Check if the manager belongs to admin's company
+     if (manager.company ==! req.session.company) {
+        return res.status(403).json({
+            success: false,
+            message: "You don't have permission to activate this manager fspokofsp"
+        });
+    }
        // check if manager is already active
        if (manager.active) {
             return res.status(400).json({
@@ -99,31 +95,25 @@ exports.getPendingManagers = async (req, res) => {
         }
 
         // Find the admin's company
-        const adminCompany = await Company.findOne({
-            managers: { 
-                $elemMatch: { 
-                    id: req.session.Userid 
-                }
-            }
-        });
-
+        adminCompany = Company.findOne({ ownername:req.session.username })
+        
         if (!adminCompany) {
-            return res.status(404).json({
-                success: false,
+            return res.status(200).json({
+                success: true,
                 message: "Admin's company not found"
-            });
+            })
         }
 
         // Find all inactive managers for the admin's company
         const pendingManagers = await Manager.find({
-            company: adminCompany._id,
+            company: req.session.company,
             active: false,
             role: 'manager'
         }).select('username email createdAt');
 
         return res.status(200).json({
             success: true,
-            company: adminCompany.companyname,
+            company: adminCompany._id,
             pendingManagers
         });
 
@@ -148,15 +138,13 @@ exports.getManagerNotifications = async (req, res) => {
             });
         }
 
-        // Find the admin's company
         const adminCompany = await Company.findOne({
             managers: { 
-                $elemMatch: { 
-                    id: req.session.Userid 
-                }
+              $elemMatch: { 
+                managerid: mongoose.Types.ObjectId(req.session.Userid)
+              }
             }
-        });
-
+          });
         if (!adminCompany) {
             return res.status(404).json({
                 success: false,

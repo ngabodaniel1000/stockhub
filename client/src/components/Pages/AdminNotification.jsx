@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 
-function Companymanage() {
+function AdminNotification() {
     const [notifications, setNotifications] = useState([]);
     const [unreadCount, setUnreadCount] = useState(0);
     const [loading, setLoading] = useState(true);
@@ -125,4 +125,4 @@ function Companymanage() {
     );
 }
 
-export default Companymanage;
+export default AdminNotification;

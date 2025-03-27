@@ -7,8 +7,10 @@ const mongoose = require('mongoose');
 const schema = new mongoose.Schema({
     companyname:{type:String, required:true},
     ownername:{type:String, required:true},
-    managers:[{type:mongoose.Schema.Types.ObjectId,ref:"Managers"}],
-    createdAt: {
+    managers:[{
+        _id:false,
+        managerid:{type:mongoose.Schema.Types.ObjectId,ref:"Managers"}}],
+    createdAt:{
         type: Date,
         default: Date.now
     }
