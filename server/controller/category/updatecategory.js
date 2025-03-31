@@ -5,11 +5,16 @@ const Categorymodel = require("../../model/category/category");
 exports.updateCategory = async (req, res) => {
     const { categoryId } = req.params; // Get category ID from request parameters
     const { categoryname } = req.body; // Get updated category name from request body
-    const managerid = req.session.Userid; // Get manager ID from session
-
+    const companyId = req.session.company; // Get company ID from session
     try {
+        if(!companyId){
+            return res.status(400).json({
+                success: false,
+                message: "Company ID is required"
+            });
+        }
         // Find the category by ID
-        const category = await Categorymodel.findOne({ _id: categoryId });
+        const category = await Categorymodel.findOne({ _id: categoryId,company: companyId });
 
         // Check if the category exists
         if (!category) {
@@ -19,13 +24,6 @@ exports.updateCategory = async (req, res) => {
             });
         }
 
-        // // Check if the category belongs to the logged-in manager
-        // if (category.man.toString() !== managerid) {
-        //     return res.status(403).json({ 
-        //         message: "You do not have permission to update this category", 
-        //         success: false 
-        //     });
-        // }
 
         // Update the category
         const updatedCategory = await Categorymodel.findByIdAndUpdate(

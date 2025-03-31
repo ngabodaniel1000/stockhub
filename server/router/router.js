@@ -45,11 +45,11 @@ router.post('/account/acceptmanager/:managerId',Middleware.isAdmin,Acceptmanager
 router.get('/account/viewpendingmanager',Middleware.isAdmin,Acceptmanager.getPendingManagers)
 
 // all routes required in category operation
-router.post("/category/add/:companyId",Middleware.ensureAuthenticated,addcategorycontoller.addcategory)
-router.get("/category/view/:companyId",Middleware.ensureAuthenticated,viewcategorycontroller.viewcategory)
+router.post("/category/add/",Middleware.ensureAuthenticated,addcategorycontoller.addcategory)
+router.get("/category/view",Middleware.ensureAuthenticated,viewcategorycontroller.viewcategory)
 router.get("/category/viewsingleitem/:categoryId",Middleware.ensureAuthenticated,viewsinglecategorycontroller.viewsinglecategory)
-router.delete("/category/delete/:companyId",Middleware.ensureAuthenticated,deleteCategorycontroller.deleteCategory)
-router.put("/category/update/:CompanyId/:categoryId",Middleware.ensureAuthenticated,UpdateCategorycontroller.updateCategory)
+router.delete("/category/delete/:categoryId",Middleware.ensureAuthenticated,deleteCategorycontroller.deleteCategory)
+router.put("/category/update/:categoryId",Middleware.ensureAuthenticated,UpdateCategorycontroller.updateCategory)
 
 // all routes required in product operation
 router.post("/product/add",Middleware.ensureAuthenticated,addproductcontroller.addproduct)

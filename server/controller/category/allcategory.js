@@ -4,30 +4,16 @@ const CompanyModel = require("../../model/company/company")
 
 // Controller for viewing all categories for a manager
 exports.viewcategory = async (req, res) => {
-    const {companyId} = req.params;
-    const managerId = req.session.Userid; // Get manager ID from session
+    const companyId = req.session.company; // Get company ID from session
 
     try {
-        // Check if company exists
-        const existingCompany = await CompanyModel.findOne({ _id: companyId });
-        if (!existingCompany) {
+        if (!companyId) {
             return res.status(400).json({
                 success: false,
-                message: "Company does not exist"
+                message: "Company ID is required"
             });
         }
 
-        // Check if user works for the company
-        const managerExists = existingCompany.managers.some(manager => 
-            manager.id.toString() === managerId.toString()
-        );
-
-        if (!managerExists) {
-            return res.status(403).json({
-                success: false,
-                message: "You don't have access to this company"
-            });
-        }
 
         // Find categories for the given company
         const mycategory = await Categorymodel.find({ company: companyId });

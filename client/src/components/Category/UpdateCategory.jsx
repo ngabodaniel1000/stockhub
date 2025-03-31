@@ -30,7 +30,7 @@ function UpdateCategory() {
         e.preventDefault();
         
         try {
-            const response = await axios.put(`http://localhost:8889/api/category/update/67d2e969126fe0ffb8530412`, {
+            const response = await axios.put(`http://localhost:8889/api/category/update/${categoryid}`, {
                 categoryname: newCategory,
             },
         {withCredentials:true}

@@ -4,9 +4,14 @@ const Categorymodel = require("../../model/category/category");
 // Controller for viewing all categories for a manager
 exports.viewsinglecategory = async (req, res) => {
     const { categoryId } = req.params; // Get category ID from request parameters
-    const managerid = req.session.Userid; // Get manager ID from session
-    const {companyId} = req.params
+    const companyId = req.session.company; // Get company ID from session
     try {
+        if(!companyId){
+            return res.status(400).json({
+                success: false,
+                message: "Company ID is required"
+            });
+        }
         // Find categories for the given company
         const mycategory = await Categorymodel.findOne({ company:companyId,_id: categoryId });
 
