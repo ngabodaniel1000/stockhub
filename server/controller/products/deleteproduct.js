@@ -4,11 +4,17 @@ const Productmodel = require("../../model/Products/Product");
 // Controller to delete a specific Product
 exports.deleteProduct = async (req, res) => {
     const { ProductId } = req.params; // Get Product ID from request parameters
-    const managerid = req.session.Userid; // Get manager ID from session
+    const companyId = req.session.company; // Get manager ID from session
 
     try {
+        if(!companyId){
+            return res.status(400).json({
+                success: false,
+                message: "Company ID is required"
+            });
+        }
         // Find the Product by ID and ensure it belongs to the logged-in manager
-        const Product = await Productmodel.findOne({ _id: ProductId, manager: managerid });
+        const Product = await Productmodel.findOne({ _id: ProductId, company: companyId });
 
         if (!Product) {
             // If the Product doesn't exist or doesn't belong to the manager

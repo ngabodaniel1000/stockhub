@@ -5,31 +5,37 @@ const mongoose = require("mongoose")
 exports.addproduct = async(req,res)=>{
     // import product model
     const productmodel = require("../../model/Products/Product");
+    const categorymodel = require("../../model/category/category")
 
     // fetching data from body
     const productname = req.body.productname
     const productprice = req.body.price
     const productcategory = req.body.category
-    const managerid = req.session.Userid
+    const companyId = req.session.company
 
     try {
-
+        if(!companyId){
+            return res.status(400).json({
+                success: false,
+                message: "Company ID is required"
+            });
+        }
         // check if all data was sent in body
-        if (!productname || !managerid || !productprice || !productcategory) {
+        if (!productname || !companyId || !productprice || !productcategory) {
             return res.status(400).json({ success: false, message: "fill all required fields" });
           }
+          // check if category name exists
+                 const checkcategory = await categorymodel.findOne({ company:companyId,_id:productcategory});
+                 if (!checkcategory) {   
+                    return res.status(404).json({ 
+                        message: "product category not exist in your category", 
+                        success: false 
+                    });
+                 } 
           
-        // check if manager id is retrived from database or if it is valid
-        if (!mongoose.Types.ObjectId.isValid(managerid)) {
-            return res.status(400).json({message:"invalid manager id",success:false}) 
-        }  
-        // check if manager id is retrived from database or if it is valid
-        if (!mongoose.Types.ObjectId.isValid(managerid)) {
-            return res.status(400).json({message:"invalid category id",success:false}) 
-        }  
      
         // Check if the product name already exists (case-insensitive)
-        const checkproduct = await productmodel.findOne({ manager: managerid });
+        const checkproduct = await productmodel.findOne({ manager: companyId });
 
         if (checkproduct) {
             if (checkproduct.productname.toLowerCase().includes(productname.toLowerCase())) {
@@ -44,7 +50,7 @@ exports.addproduct = async(req,res)=>{
         const addproduct = await new productmodel({
             productname:productname,
             price:productprice,
-            manager:managerid,
+            company:companyId,
             category:productcategory
         })
         // save new product in mongodb

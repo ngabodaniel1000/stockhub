@@ -9,11 +9,17 @@ exports.updateProduct = async (req, res) => {
      const productname = req.body.productname
      const productprice = req.body.price
      const productcategory = req.body.category
-     const managerid = req.session.Userid
+     const companyId = req.session.company; // Get manager ID from session
 
-    try {
+     try {
+         if(!companyId){
+             return res.status(400).json({
+                 success: false,
+                 message: "Company ID is required"
+             });
+         }
         // Find the Product by ID
-        const Product = await Productmodel.findOne({ _id: ProductId });
+        const Product = await Productmodel.findOne({ _id: ProductId,company:companyId });
 
         // Check if the Product exists
         if (!Product) {
@@ -24,13 +30,6 @@ exports.updateProduct = async (req, res) => {
             });
         }
 
-        // Check if the Product belongs to the logged-in manager
-        if (Product.manager.toString() != managerid) {
-            return res.status(403).json({ 
-                message: "You do not have permission to update this Product", 
-                success: false 
-            });
-        }
 
         // Update the Product
         const updatedProduct = await Productmodel.findByIdAndUpdate(
@@ -38,7 +37,6 @@ exports.updateProduct = async (req, res) => {
             {
             productname:productname,
             price:productprice,
-            quantity:productquantity,
             category:productcategory }, // Update the Product name
             { new: true } // Return the updated document
         );

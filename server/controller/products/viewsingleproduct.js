@@ -3,17 +3,23 @@ const Productmodel = require("../../model/Products/Product");
 
 // Controller for viewing all categories for a manager
 exports.viewSingleProduct = async (req, res) => {
-    const managerid = req.session.Userid; // Get manager ID from session
+    const companyId = req.session.company; // Get manager ID from session
     const { ProductId } = req.params; // Get Product ID from request parameters
 
     try {
+        if(!companyId){
+            return res.status(400).json({
+                success: false,
+                message: "Company ID is required"
+            });
+        }
         // Find categories for the given manager
-        const myProduct = await Productmodel.find({ manager: managerid,_id: ProductId });
+        const myProduct = await Productmodel.find({ company: companyId,_id: ProductId });
 
         if (myProduct.length > 0) {
             // If categories are found, return them
             return res.status(200).json({ 
-                allproducts: myProduct, 
+                product: myProduct, 
                 success: true 
             });
         } else {
