@@ -40,6 +40,11 @@ const viewstockcontroller = require("../controller/Stockin/viewstockin")
 const updatestockcontroller = require("../controller/Stockin/updatestockin")
 const deletestockcontroller = require("../controller/Stockin/deletestockin")
 
+// importing controller required in stockout opration
+const viewstockoutcontroller = require("../controller/stockout/viewstockout")
+const addstockoutcontroller = require("../controller/stockout/addstockout")
+const updatestockoutcontroller = require("../controller/stockout/updatestockout")
+
 // make basic routes
 router.get('/', (req, res) => res.send('Hello World!'))
 router.get('/home', (req, res) => res.send('Home page'))
@@ -85,6 +90,10 @@ router.get("/stock/view", Middleware.ensureAuthenticated, viewstockcontroller.vi
 router.delete("/stock/delete/:stockInId", Middleware.ensureAuthenticated, deletestockcontroller.delete)
 router.put("/stock/update/:stockId", Middleware.ensureAuthenticated, updatestockcontroller.updateStockStatus)
 
+// all routes required in stockout operation
+router.post("/stockout/add/:productId", Middleware.ensureAuthenticated, addstockoutcontroller.addStockOut)
+router.get("/stockout/view", Middleware.ensureAuthenticated, viewstockoutcontroller.viewStockOut)
+router.put("/stockout/update/:stockOutId", Middleware.ensureAuthenticated, updatestockoutcontroller.updateStockOutStatus)
 
 // Create a new customer
 router.post('/customer/add', async (req, res) => {

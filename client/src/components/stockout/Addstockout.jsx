@@ -114,6 +114,7 @@ const AddStockOut = () => {
                                 {customer.name}
                             </option>
                         ))}
+
                     </select>
                 </div>
 
