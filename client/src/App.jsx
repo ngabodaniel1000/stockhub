@@ -25,6 +25,12 @@ import DeleteSupplier from './components/Suppliers/DeleteSupplier.jsx'
 import Stock from './components/Stock/Stock.jsx'
 import AddStock from './components/Stock/AddStock.jsx'
 import ViewProduct from './components/Products/ViewProduct.jsx'
+import StockOut from './components/stockout/stockout.jsx'
+import AddStockOut from './components/stockout/Addstockout.jsx'
+import Customers from './components/Customers/Customers.jsx'
+import AddCustomer from './components/Customers/AddCustomer.jsx'
+import UpdateCustomer from './components/Customers/UpdateCustomer.jsx'
+import DeleteCustomer from './components/Customers/DeleteCustomer.jsx'
 
 function App() {
   return (
@@ -56,9 +62,17 @@ function App() {
           <Route path="/supplier/add" element={<AddSupplier />} />
           <Route path="/supplier/update/:supplierId" element={<UpdateSupplier />} />
           <Route path="/supplier/delete/:supplierId" element={<DeleteSupplier />} />
-          {/* Stock Routes */}
+          {/* StockIn Routes */}
           <Route path="/stock" element={<Stock />} />
           <Route path="/stock/add/:productId" element={<AddStock />} />
+          {/* StockOUt Routes */}
+          <Route path="/stockout" element={<StockOut />} />
+          <Route path="/stockout/add/:productId" element={<AddStockOut />} />
+          {/* Customer Routes */}
+          <Route path="/customers" element={<Customers />} />
+          <Route path="/customer/add" element={<AddCustomer />} />
+          <Route path="/customer/update/:id" element={<UpdateCustomer />} />
+          <Route path="/customer/delete/:id" element={<DeleteCustomer />} />
         </Routes>
       </Router>
     </div>

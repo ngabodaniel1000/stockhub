@@ -3,6 +3,7 @@ const express = require('express')
 const router = express.Router()
 // importing middleware
 const Middleware = require("../middleware/AuthMiddleware")
+const CustomerModel = require('../model/customer/customer');
 
 // importing controller used in login system
 const AdminLogincontroller = require('../controller/Accounts/Admincontroller')
@@ -83,6 +84,171 @@ router.post("/stock/add/:productId", Middleware.ensureAuthenticated, addstockcon
 router.get("/stock/view", Middleware.ensureAuthenticated, viewstockcontroller.viewStock)
 router.delete("/stock/delete/:stockInId", Middleware.ensureAuthenticated, deletestockcontroller.delete)
 router.put("/stock/update/:stockId", Middleware.ensureAuthenticated, updatestockcontroller.updateStockStatus)
+
+
+// Create a new customer
+router.post('/customer/add', async (req, res) => {
+    const { name, contactEmail, phone, address } = req.body;
+    const companyId = req.session.company;
+
+    try {
+        if (!companyId) {
+            return res.status(400).json({
+                success: false,
+                message: "Company ID is required"
+            });
+        }
+        if(!name || !contactEmail || !phone || !address){
+            return res.status(400).json({
+                success: false,
+                message: "Fill all required fields"
+            });
+        }
+
+   // Check if supplier with same name already exists for this company
+          const existingCustomer = await CustomerModel.findOne({ 
+              company: companyId,
+              name: { $regex: new RegExp(name, 'i') }
+          });
+  
+          if (existingCustomer) {
+              return res.status(400).json({
+                  success: false,
+                  message: "Customer with this name already exists for your company"
+              });
+          }
+  
+          // Create new supplier
+          const newCustomer = new CustomerModel({
+              name,
+              contactEmail,
+              phone,
+              address,
+              company: companyId
+          });
+  
+          await newCustomer.save();
+  
+          return res.status(201).json({
+              success: true,
+              message: "Customer added successfully",
+              customer: newCustomer
+          });
+  
+      } catch (error) {
+          console.error("Error adding customer:", error);
+          return res.status(500).json({
+              success: false,
+              message: "An error occurred while adding the customer"
+          });
+      }
+  })
+
+// Get all customers
+router.get('/customer/view', async (req, res) => {
+    try {
+        const customers = await CustomerModel.find().populate('company');
+        res.status(200).json({ success: true, customers });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// Get a single customer
+router.get('/customer/view/:id', async (req, res) => {
+    try {
+        const customer = await CustomerModel.findById(req.params.id).populate('company');
+        if (!customer) {
+            return res.status(404).json({ success: false, message: 'Customer not found' });
+        }
+        res.status(200).json({ success: true, customer });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// Update a customer
+router.put('/customer/update/:customerId', async (req, res) => {
+     const { customerId } = req.params;
+        const { name, contactEmail, phone, address } = req.body;
+        const companyId = req.session.company;
+    
+        try {
+            if (!companyId) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Company ID is required"
+                });
+            }
+    
+            // Check if supplier exists and belongs to the company
+            const existingcustomer = await CustomerModel.findOne({ 
+                _id:customerId,
+                company: companyId 
+            });
+    
+            if (!existingcustomer) {
+                return res.status(404).json({
+                    success: false,
+                    message: "Customer not found"
+                });
+            }
+    
+            // Check if new name conflicts with existing suppliers
+            if (name && name.toLowerCase() !== existingcustomer.name.toLowerCase()) {
+                const nameConflict = await CustomerModel.findOne({
+                    company: companyId,
+                    name: { $regex: new RegExp(name, 'i') },
+                    _id: { $ne: customerId }
+                });
+    
+                if (nameConflict) {
+                    return res.status(400).json({
+                        success: false,
+                        message: "  Customer with this name already exists for your company"
+                    });
+                }
+            }
+    
+            // Update supplier
+            const updatedcustomer = await CustomerModel.findByIdAndUpdate(
+                customerId,
+                {
+                    name: name || existingcustomer.name,
+                    contactEmail: contactEmail || existingcustomer.contactEmail,
+                    phone: phone || existingcustomer.phone,
+                    address: address || existingcustomer.address
+                },
+                { new: true }
+            );
+    
+            return res.status(200).json({
+                success: true,
+                message: "Customer updated successfully",
+                supplier: updatedcustomer
+            });
+    
+        } catch (error) {
+            console.error("Error updating customer:", error);
+            return res.status(500).json({
+                success: false,
+                message: "An error occurred while updating the customer"
+            });
+        }
+});
+
+// Delete a customer
+router.delete('/customer/delete/:id', async (req, res) => {
+    try {
+        const customer = await CustomerModel.findByIdAndDelete(req.params.id);
+        if (!customer) {
+            return res.status(404).json({ success: false, message: 'Customer not found' });
+        }
+        res.status(200).json({ success: true, message: 'Customer deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
 
 // exporting routers
 module.exports = router

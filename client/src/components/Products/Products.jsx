@@ -228,6 +228,12 @@ const Products = () => {
               >
                 Add Stock
               </Link>
+              <Link
+                to={`/stockout/add/${product._id}`}
+                className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm"
+              >
+                Remove Stock
+              </Link>
             </div>
           </div>
         ))}
