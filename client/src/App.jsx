@@ -14,7 +14,17 @@ import DeleteCategory from './components/Category/deleteCategory.jsx'
 import UpdateCategory from './components/Category/UpdateCategory.jsx'
 import ViewSingleCategory from './components/Category/ViewSingleCategory.jsx'
 import AdminNotification from './components/Pages/AdminNotification.jsx'
-
+import Products from './components/Products/Products.jsx'
+import AddProduct from './components/Products/AddProduct.jsx'
+import UpdateProduct from './components/Products/UpdateProduct.jsx'
+import DeleteProduct from './components/Products/DeleteProduct.jsx'
+import Suppliers from './components/Suppliers/Suppliers.jsx'
+import AddSupplier from './components/Suppliers/AddSupplier.jsx'
+import UpdateSupplier from './components/Suppliers/UpdateSupplier.jsx'
+import DeleteSupplier from './components/Suppliers/DeleteSupplier.jsx'
+import Stock from './components/Stock/Stock.jsx'
+import AddStock from './components/Stock/AddStock.jsx'
+import ViewProduct from './components/Products/ViewProduct.jsx'
 
 function App() {
   return (
@@ -35,6 +45,20 @@ function App() {
           <Route path="/notification" element={<AdminNotification />} />
           <Route path="/adminregister" element={<AdminRegister />} />
           <Route path="/updateprofile/:userId" element={<Updateprofile />} />
+          {/* Product Routes */}
+          <Route path="/products" element={<Products />} />
+          <Route path="/product/add" element={<AddProduct />} />
+          <Route path="/product/viewsingleitem/:productId" element={<ViewProduct />} />
+          <Route path="/product/update/:productId" element={<UpdateProduct />} />
+          <Route path="/product/delete/:productId" element={<DeleteProduct />} />
+          {/* Supplier Routes */}
+          <Route path="/suppliers" element={<Suppliers />} />
+          <Route path="/supplier/add" element={<AddSupplier />} />
+          <Route path="/supplier/update/:supplierId" element={<UpdateSupplier />} />
+          <Route path="/supplier/delete/:supplierId" element={<DeleteSupplier />} />
+          {/* Stock Routes */}
+          <Route path="/stock" element={<Stock />} />
+          <Route path="/stock/add/:productId" element={<AddStock />} />
         </Routes>
       </Router>
     </div>

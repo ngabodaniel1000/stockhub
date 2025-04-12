@@ -6,9 +6,11 @@ const mongoose = require('mongoose');
 
 const schema = new mongoose.Schema({
     productname:{type:String, required:true},
-    price:{type:Number ,required:true},
-    category:{type:mongoose.Schema.Types.ObjectId,ref:"category"},
-    company:{type:mongoose.Schema.Types.ObjectId,ref:"companies"}  
+    description:{type:String, required:true},
+    quantity:{type:Number,default:0, min:0},
+    category:{type:mongoose.Schema.Types.ObjectId,ref:"Categories"},
+    image:{type:String, required:false},
+    company:{type:mongoose.Schema.Types.ObjectId,ref:"companies"},
 },{
     timestamps: true
 }  

@@ -3,7 +3,7 @@ const Productmodel = require("../../model/Products/Product");
 
 // Controller to delete a specific Product
 exports.deleteProduct = async (req, res) => {
-    const { ProductId } = req.params; // Get Product ID from request parameters
+    const { productId } = req.params; // Get Product ID from request parameters
     const companyId = req.session.company; // Get manager ID from session
 
     try {
@@ -14,7 +14,7 @@ exports.deleteProduct = async (req, res) => {
             });
         }
         // Find the Product by ID and ensure it belongs to the logged-in manager
-        const Product = await Productmodel.findOne({ _id: ProductId, company: companyId });
+        const Product = await Productmodel.findOne({ _id: productId, company: companyId });
 
         if (!Product) {
             // If the Product doesn't exist or doesn't belong to the manager
@@ -25,7 +25,7 @@ exports.deleteProduct = async (req, res) => {
         }
 
         // Delete the Product
-        await Productmodel.deleteOne({ _id: ProductId });
+        await Productmodel.deleteOne({ _id: productId });
 
         // Return success response
         return res.status(200).json({ 

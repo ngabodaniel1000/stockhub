@@ -11,7 +11,7 @@ const MongoStore = require("connect-mongo")
 const SettingsModel = require("./model/settings/Settings")
 const ProductsModel = require("./model/Products/Product")
 const SalesModel = require("./model/sales/Sales")
-const PurchaseModel = require("./model/purchase/Purchase")
+const StockInModel = require("./model/Stockin/Stockin")
 const CategoryModel = require("./model/category/category")
 const CompanyModel = require("./model/company/company")
 

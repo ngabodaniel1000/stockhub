@@ -1,58 +1,49 @@
 // Importing Product model
 const Productmodel = require("../../model/Products/Product");
+const CategoryModel = require('../../model/category/category');
 
 // Controller to update a specific Product
 exports.updateProduct = async (req, res) => {
-    const { ProductId } = req.params; // Get Product ID from request parameters
+    try {
+        const { productId } = req.params;
+        const { productname, description, quantity, category, image } = req.body;
+        const companyId = req.session.company;
 
-     // fetching data from body
-     const productname = req.body.productname
-     const productprice = req.body.price
-     const productcategory = req.body.category
-     const companyId = req.session.company; // Get manager ID from session
-
-     try {
-         if(!companyId){
-             return res.status(400).json({
-                 success: false,
-                 message: "Company ID is required"
-             });
-         }
-        // Find the Product by ID
-        const Product = await Productmodel.findOne({ _id: ProductId,company:companyId });
-
-        // Check if the Product exists
-        if (!Product) {
-            return res.status(404).json({ 
-                updatedid:ProductId,
-                message: "Product not found", 
-                success: false 
-            });
+        if (!companyId) {
+            return res.status(400).json({ success: false, message: 'Company ID is required' });
         }
 
+        // Check if product exists and belongs to the company
+        const product = await Productmodel.findOne({ _id: productId, company: companyId });
+        if (!product) {
+            return res.status(404).json({ success: false, message: 'Product not foundjhdjkd' });
+        }
 
-        // Update the Product
+        // Check if category exists and belongs to the company
+        if (category) {
+            const categoryExists = await CategoryModel.findOne({ _id: category, company: companyId });
+            if (!categoryExists) {
+                return res.status(404).json({ success: false, message: 'Category not found' });
+            }
+        }
+
+        // Update product fields
+        const updateData = {
+            productname: productname || product.productname,
+            description: description || product.description,
+            quantity: quantity !== undefined ? quantity : product.quantity,
+            category: category || product.category,
+            image: image || product.image
+        };
+
         const updatedProduct = await Productmodel.findByIdAndUpdate(
-            ProductId, 
-            {
-            productname:productname,
-            price:productprice,
-            category:productcategory }, // Update the Product name
-            { new: true } // Return the updated document
+            productId,
+            updateData,
+            { new: true }
         );
 
-        // Return success response with the updated Product
-        return res.status(200).json({ 
-            message: "Product updated successfully", 
-            success: true, 
-            updatedProduct 
-        });
+        res.status(200).json({ success: true, data: updatedProduct });
     } catch (error) {
-        // Handle any errors that occur
-        console.error("Error updating Product:", error);
-        return res.status(500).json({ 
-            message: "An error occurred while updating the Product", 
-            success: false 
-        });
+        res.status(500).json({ success: false, message: error.message });
     }
 };

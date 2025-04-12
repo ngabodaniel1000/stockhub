@@ -1,40 +1,61 @@
 // Importing Product model
-const Productmodel = require("../../model/Products/Product");
+const ProductsModel = require("../../model/Products/Product");
+const CategoryModel = require("../../model/category/category");
 
 // Controller for viewing all categories for a manager
 exports.viewProduct = async (req, res) => {
-    const companyId = req.session.company; // Get manager ID from session
-
     try {
-        if(!companyId){
+        const companyId = req.session.company;
+        const { search, category, sortBy, sortOrder } = req.query;
+
+        if (!companyId) {
             return res.status(400).json({
                 success: false,
                 message: "Company ID is required"
             });
         }
-        
-        // Find categories for the given manager
-        const myProduct = await Productmodel.find({ company: companyId });
 
-        if (myProduct) {
-            // If categories are found, return them
-            return res.status(200).json({ 
-                allproducts: myProduct, 
-                success: true 
-            });
-        } else {
-            // If no categories are found, return a message
-            return res.status(404).json({ 
-                message: "No product found for this manager", 
-                success: false 
-            });
+        // Base query
+        let query = { company: companyId };
+
+        // Search functionality (by product name)
+        if (search) {
+            query.productname = { $regex: search, $options: 'i' };
         }
+
+        // Filter by category
+        if (category) {
+            query.category = category;
+        }
+
+        // Sorting
+        let sortOption = { createdAt: -1 }; // Default sort
+        if (sortBy) {
+            sortOption = {};
+            sortOption[sortBy] = sortOrder === 'desc' ? -1 : 1;
+        }
+
+        const products = await ProductsModel.find(query)
+            .populate({
+                path: 'category',
+                select: 'categoryname'
+            })
+            .sort(sortOption)
+            .exec();
+
+        // Get distinct categories for filter dropdown
+        const categories = await ProductsModel.distinct('category', { company: companyId });
+
+        res.status(200).json({
+            success: true,
+            allproducts: products,
+            categories: categories
+        });
     } catch (error) {
-        // Handle any errors that occur
         console.error("Error fetching products:", error);
-        return res.status(500).json({ 
-            message: "An error occurred while fetching products", 
-            success: false 
+        res.status(500).json({
+            success: false,
+            message: error.message
         });
     }
 };
