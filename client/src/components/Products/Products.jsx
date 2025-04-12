@@ -92,7 +92,12 @@ const Products = () => {
       });
       
       if (response.data.success) {
-        const sortedProducts = sortProducts(response.data.allproducts, sortOption);
+        // Filter only products where deleted is false
+        const nonDeletedProducts = response.data.allproducts.filter(
+          (product) => product.isDeleted === false
+        );
+  
+        const sortedProducts = sortProducts(nonDeletedProducts, sortOption);
         setProducts(sortedProducts);
         setFilteredProducts(sortedProducts);
       } else {

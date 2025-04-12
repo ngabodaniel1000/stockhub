@@ -7,6 +7,7 @@ const Stock = () => {
     const [filteredStock, setFilteredStock] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [DeletingId,setDeletingId] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [statusFilter, setStatusFilter] = useState('');
     const [sortOption, setSortOption] = useState('createdAt_desc');
@@ -28,8 +29,9 @@ const Stock = () => {
                 withCredentials: true
             });
             if (response.data.success) {
-                setStock(response.data.stock);
-                setFilteredStock(response.data.stock);
+                const nonDeletedStock = response.data.stock.filter(item => !item.isDeleted);
+                setStock(nonDeletedStock);
+                setFilteredStock(nonDeletedStock);
             }
         } catch (err) {
             setError('Failed to fetch stock data');
@@ -60,6 +62,32 @@ const Stock = () => {
 
     const handleSortChange = (e) => {
         setSortOption(e.target.value);
+    };
+    const handledelete = async (stockInId) => {
+        if (!window.confirm('Are you sure you want to move this item to trash?')) {
+            return;
+        }
+
+        setDeletingId(stockInId);
+        try {
+            const response = await axios.delete(
+                `http://localhost:8889/api/stock/delete/${stockInId}`,
+                { withCredentials: true }
+            );
+            
+            if (response.data.success) {
+                // Remove the deleted item from state instead of navigating
+                setStock(stock.filter(item => item._id !== stockInId));
+                setFilteredStock(filteredStock.filter(item => item._id !== stockInId));
+            } else {
+                setError(response.data.message || 'Failed to delete stock');
+            }
+        } catch (err) {
+            setError(err.response?.data?.message || 'Failed to delete stock');
+            console.error('Error deleting stock:', err);
+        } finally {
+            setDeletingId(null);
+        }
     };
 
     const handleStatusUpdate = async (stockId, newStatus) => {
@@ -177,9 +205,9 @@ const Stock = () => {
                         <p className="text-gray-600 mb-4">
                             Date: {new Date(item.createdAt).toLocaleDateString()}
                         </p>
-                        {item.status === 'cancelled' && (                            
+                        {item.status === 'cancelled' || 'recieved' && (                            
                             <button 
-                                // onClick={handledelete(item._id)} 
+                            onClick={() => handledelete(item._id)}
                                 className='bg-red-500 text-sm text-white px-3 py-1 rounded hover:bg-red-800'
                             >
                                 Move to trash

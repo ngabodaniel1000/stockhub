@@ -11,6 +11,10 @@ const schema = new mongoose.Schema({
     category:{type:mongoose.Schema.Types.ObjectId,ref:"Categories"},
     image:{type:String, required:false},
     company:{type:mongoose.Schema.Types.ObjectId,ref:"companies"},
+    isDeleted: {
+        type: Boolean,
+        default: false
+    }
 },{
     timestamps: true
 }  

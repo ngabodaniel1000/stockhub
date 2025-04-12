@@ -10,6 +10,7 @@ const Stockout = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [statusFilter, setStatusFilter] = useState('');
     const [sortOption, setSortOption] = useState('createdAt_desc');
+    const [DeletingId, setDeletingId] = useState(null);
     const [updatingStatus, setUpdatingStatus] = useState(null);
 
     useEffect(() => {
@@ -29,8 +30,9 @@ const Stockout = () => {
                 withCredentials: true
             });
             if (response.data.success) {
-                setStockOut(response.data.stockOut);
-                setFilteredStockOut(response.data.stockOut);
+                const nonDeletedStock = response.data.stockOut.filter(item => !item.isDeleted);
+                setStockOut(nonDeletedStock);
+                setFilteredStockOut(nonDeletedStock);
             }
         } catch (err) {
             setError('Failed to fetch stock out data');
@@ -42,22 +44,48 @@ const Stockout = () => {
 
     useEffect(() => {
         let result = [...stockOut];
-        
+
         if (searchTerm) {
-            result = result.filter(item => 
+            result = result.filter(item =>
                 item.product?.productname?.toLowerCase().includes(searchTerm.toLowerCase())
             );
         }
-        
+
         if (statusFilter) {
             result = result.filter(item => item.status === statusFilter);
         }
-        
+
         setFilteredStockOut(result);
     }, [searchTerm, statusFilter, stockOut]);
 
     const handleSortChange = (e) => {
         setSortOption(e.target.value);
+    };
+
+    const handledelete = async (stockOutId) => {
+        if (!window.confirm('Are you sure you want to move this item to trash?')) {
+            return;
+        }
+
+        setDeletingId(stockOutId);
+        try {
+            const response = await axios.delete(
+                `http://localhost:8889/api/stockout/delete/${stockOutId}`,
+                { withCredentials: true }
+            );
+
+            if (response.data.success) {
+                setStockOut(stockOut.filter(item => item._id !== stockOutId));
+                setFilteredStockOut(filteredStockOut.filter(item => item._id !== stockOutId));
+            } else {
+                setError(response.data.message || 'Failed to delete stock');
+            }
+        } catch (err) {
+            setError(err.response?.data?.message || 'Failed to delete stock');
+            console.error('Error deleting stock:', err);
+        } finally {
+            setDeletingId(null);
+        }
     };
 
     const handleStatusUpdate = async (stockOutId, newStatus) => {
@@ -68,9 +96,9 @@ const Stockout = () => {
                 { status: newStatus },
                 { withCredentials: true }
             );
-            
+
             if (response.data.success) {
-                setStockOut(stockOut.map(item => 
+                setStockOut(stockOut.map(item =>
                     item._id === stockOutId ? { ...item, status: newStatus } : item
                 ));
                 fetchStockOut();
@@ -115,7 +143,7 @@ const Stockout = () => {
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
                     </div>
-                    
+
                     <div>
                         <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-1">
                             Filter by Status
@@ -132,7 +160,7 @@ const Stockout = () => {
                             <option value="cancelled">Cancelled</option>
                         </select>
                     </div>
-                    
+
                     <div>
                         <label htmlFor="sort" className="block text-sm font-medium text-gray-700 mb-1">
                             Sort By
@@ -169,69 +197,46 @@ const Stockout = () => {
                             Reason: <span className="capitalize">{item.reason}</span>
                         </p>
                         <p className="text-gray-600 mb-2">
-                            Status: 
+                            Status:
                             {item.status === 'pending' && (
                                 <span className="ml-2 px-2 inline-flex text-md leading-5 font-semibold bg-yellow-100 text-yellow-800 rounded-full">{item.status}</span>
-                            )}   
+                            )}
                             {item.status === 'processed' && (
                                 <span className="ml-2 px-2 inline-flex text-md leading-5 font-semibold bg-green-100 text-green-800 rounded-full">{item.status}</span>
-                            )}   
+                            )}
                             {item.status === 'cancelled' && (
                                 <span className="ml-2 px-2 inline-flex text-md leading-5 font-semibold bg-red-100 text-red-800 rounded-full">{item.status}</span>
-                            )}   
+                            )}
                         </p>
                         <p className="text-gray-600 mb-4">
                             Date: {new Date(item.createdAt).toLocaleDateString()}
                         </p>
-                        
-                        <div className="flex flex-wrap gap-2">
-                            {item.status === 'pending' && (
-                                <>
-                                    <button
-                                        onClick={() => handleStatusUpdate(item._id, 'processed')}
-                                        disabled={updatingStatus === item._id}
-                                        className={`bg-green-500 text-sm text-white px-3 py-1 rounded hover:bg-green-600 ${
-                                            updatingStatus === item._id ? 'opacity-50 cursor-not-allowed' : ''
-                                        }`}
-                                    >
-                                        {updatingStatus === item._id ? 'Processing...' : 'Mark as Processed'}
-                                    </button>
-                                    <button
-                                        onClick={() => handleStatusUpdate(item._id, 'cancelled')}
-                                        disabled={updatingStatus === item._id}
-                                        className={`bg-red-500 text-sm text-white px-3 py-1 rounded hover:bg-red-600 ${
-                                            updatingStatus === item._id ? 'opacity-50 cursor-not-allowed' : ''
-                                        }`}
-                                    >
-                                        {updatingStatus === item._id ? 'Processing...' : 'Mark as Cancelled'}
-                                    </button>
-                                </>
-                            )}
-                            
-                            {item.status === 'processed' && (
-                                <button
-                                    onClick={() => handleStatusUpdate(item._id, 'cancelled')}
-                                    disabled={updatingStatus === item._id}
-                                    className={`bg-red-500 text-sm text-white px-3 py-1 rounded hover:bg-red-600 ${
-                                        updatingStatus === item._id ? 'opacity-50 cursor-not-allowed' : ''
-                                    }`}
-                                >
-                                    {updatingStatus === item._id ? 'Processing...' : 'Mark as Cancelled'}
-                                </button>
-                            )}
-                            
-                            {item.status === 'cancelled' && (
+
+                        {item.status === 'cancelled' && (
+                            <button
+                                onClick={() => handledelete(item._id)}
+                                className='bg-red-500 text-sm text-white px-3 py-1 rounded hover:bg-red-800'
+                            >
+                                Move to Trash
+                            </button>
+                        )}
+
+                        {item.status === 'pending' && (
+                            <div className="flex gap-2 mt-2">
                                 <button
                                     onClick={() => handleStatusUpdate(item._id, 'processed')}
-                                    disabled={updatingStatus === item._id}
-                                    className={`bg-green-500 text-sm text-white px-3 py-1 rounded hover:bg-green-600 ${
-                                        updatingStatus === item._id ? 'opacity-50 cursor-not-allowed' : ''
-                                    }`}
+                                    className="bg-green-500 text-sm text-white px-3 py-1 rounded hover:bg-green-600"
                                 >
-                                    {updatingStatus === item._id ? 'Processing...' : 'Restore as Processed'}
+                                    Mark as Processed
                                 </button>
-                            )}
-                        </div>
+                                <button
+                                    onClick={() => handleStatusUpdate(item._id, 'cancelled')}
+                                    className="bg-red-500 text-sm text-white px-3 py-1 rounded hover:bg-red-800"
+                                >
+                                    Mark as Cancelled
+                                </button>
+                            </div>
+                        )}
                     </div>
                 ))}
             </div>
@@ -239,7 +244,7 @@ const Stockout = () => {
             {filteredStockOut.length === 0 && (
                 <div className="text-center py-8">
                     <p className="text-gray-500">No stock out entries found matching your criteria.</p>
-                    <button 
+                    <button
                         onClick={() => {
                             setSearchTerm('');
                             setStatusFilter('');

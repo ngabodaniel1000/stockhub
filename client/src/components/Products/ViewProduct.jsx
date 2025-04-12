@@ -77,27 +77,27 @@ const ViewProduct = () => {
       <div className="bg-white shadow-md rounded-lg p-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <h2 className="text-xl font-semibold mb-2">{"product.productname"}</h2>
-            <p className="text-gray-600 mb-4">{"product.description"}</p>
+            <h2 className="text-xl font-semibold mb-2">{product.productname}</h2>
+            <p className="text-gray-600 mb-4">{product.description}</p>
             
             <div className="mb-4">
               <span className="font-semibold">Quantity:</span>
-              <span className="ml-2">{"product.quantity"}</span>
+              <span className="ml-2">{product.quantity}</span>
             </div>
 
             <div className="mb-4">
               <span className="font-semibold">Category:</span>
-              <span className="ml-2">{"product.category?.categoryname" || 'Uncategorized'}</span>
+              <span className="ml-2">{product.category?.categoryname || 'Uncategorized'}</span>
             </div>
 
             <div className="mb-4">
               <span className="font-semibold">Created At:</span>
-              <span className="ml-2">{"new Date(product.createdAt).toLocaleString()"}</span>
+              <span className="ml-2">{new Date(product.createdAt).toLocaleString()}</span>
             </div>
 
             <div className="mb-4">
               <span className="font-semibold">Last Updated:</span>
-              <span className="ml-2">{"new Date(product.updatedAt).toLocaleString()"}</span>
+              <span className="ml-2">{new Date(product.updatedAt).toLocaleString()}</span>
             </div>
           </div>
 

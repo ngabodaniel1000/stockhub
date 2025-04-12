@@ -44,6 +44,7 @@ const deletestockcontroller = require("../controller/Stockin/deletestockin")
 const viewstockoutcontroller = require("../controller/stockout/viewstockout")
 const addstockoutcontroller = require("../controller/stockout/addstockout")
 const updatestockoutcontroller = require("../controller/stockout/updatestockout")
+const deletestockoutcontroller = require("../controller/stockout/deletestockout")
 
 // make basic routes
 router.get('/', (req, res) => res.send('Hello World!'))
@@ -94,6 +95,7 @@ router.put("/stock/update/:stockId", Middleware.ensureAuthenticated, updatestock
 router.post("/stockout/add/:productId", Middleware.ensureAuthenticated, addstockoutcontroller.addStockOut)
 router.get("/stockout/view", Middleware.ensureAuthenticated, viewstockoutcontroller.viewStockOut)
 router.put("/stockout/update/:stockOutId", Middleware.ensureAuthenticated, updatestockoutcontroller.updateStockOutStatus)
+router.delete("/stockout/delete/:stockOutId", Middleware.ensureAuthenticated, deletestockoutcontroller.delete)
 
 // Create a new customer
 router.post('/customer/add', async (req, res) => {

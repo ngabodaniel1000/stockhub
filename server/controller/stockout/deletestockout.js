@@ -1,7 +1,7 @@
-const Stock = require('../../model/Stockin/Stockin');
+const Stock = require('../../model/stockout/stockout');
 const Product = require('../../model/Products/Product');
 exports.delete = async (req, res) => {
-    const { stockInId } = req.params;
+    const { stockOutId } = req.params;
     const companyId = req.session.company;
 
     try {
@@ -14,7 +14,7 @@ exports.delete = async (req, res) => {
 
         // Soft delete implementation (recommended)
         const deletedStock = await Stock.findOneAndUpdate(
-            { _id: stockInId, company: companyId },
+            { _id: stockOutId, company: companyId },
             { 
                 isDeleted: true,
                 deletedAt: new Date() 
