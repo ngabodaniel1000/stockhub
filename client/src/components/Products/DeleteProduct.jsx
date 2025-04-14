@@ -89,7 +89,7 @@ const DeleteProduct = () => {
   }
 
   return (
-    <div className="container mx-auto p-4 max-w-md">
+    <div className="container mx-auto p-4 max-w-md min-h-screen">
       <h1 className="text-2xl font-bold mb-6 text-center">Delete Product</h1>
 
       <div className="bg-white shadow-md rounded-lg px-6 py-4 mb-6">

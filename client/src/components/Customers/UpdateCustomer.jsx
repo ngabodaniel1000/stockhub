@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 
-const UpdateCustomer = () => {
+const UpdateCustomer = (darkmode) => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [formData, setFormData] = useState({
@@ -55,12 +55,12 @@ const UpdateCustomer = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Update Customer</h1>
+    <div className="container mx-auto p-4 min-h-screen">
+      <h1 className={`${darkmode? "text-white" : "text-black"} lg:text-lg font-bold mt-10 ml-20 lg:ml-[200px] mb-10`}>Update Customer</h1>
       {error && <div className="text-red-500 mb-4">{error}</div>}
-      <form onSubmit={handleSubmit} className="max-w-md">
+      <form onSubmit={handleSubmit} className={`${darkmode ?"shadow-sm shadow-gray-50":""} max-w-md p-10 rounded-lg shadow-md lg:ml-[200px]`}>
         <div className="mb-4">
-          <label className="block text-gray-700 mb-2">Name</label>
+          <label className={`block ${darkmode?"text-white":"text-gray-700"}  text-sm font-bold mb-2`}>Name</label>
           <input
             type="text"
             name="name"
@@ -71,7 +71,7 @@ const UpdateCustomer = () => {
           />
         </div>
         <div className="mb-4">
-          <label className="block text-gray-700 mb-2">Email</label>
+          <label className={`block ${darkmode?"text-white":"text-gray-700"}  text-sm font-bold mb-2`}>Email</label>
           <input
             type="email"
             name="contactEmail"
@@ -81,7 +81,7 @@ const UpdateCustomer = () => {
           />
         </div>
         <div className="mb-4">
-          <label className="block text-gray-700 mb-2">Phone</label>
+          <label className={`block ${darkmode?"text-white":"text-gray-700"}  text-sm font-bold mb-2`}>Phone</label>
           <input
             type="tel"
             name="phone"
@@ -91,22 +91,11 @@ const UpdateCustomer = () => {
           />
         </div>
         <div className="mb-4">
-          <label className="block text-gray-700 mb-2">Address</label>
+          <label className={`block ${darkmode?"text-white":"text-gray-700"}  text-sm font-bold mb-2`}>Address</label>
           <textarea
             name="address"
             value={formData.address}
             onChange={handleChange}
-            className="w-full px-3 py-2 border rounded"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700 mb-2">Company</label>
-          <input
-            type="text"
-            name="company"
-            value={formData.company}
-            onChange={handleChange}
-            required
             className="w-full px-3 py-2 border rounded"
           />
         </div>

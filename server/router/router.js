@@ -46,6 +46,15 @@ const addstockoutcontroller = require("../controller/stockout/addstockout")
 const updatestockoutcontroller = require("../controller/stockout/updatestockout")
 const deletestockoutcontroller = require("../controller/stockout/deletestockout")
 
+// importing controller required for dashboard
+const lengthcontroller = require("../controller/dashboard/length")
+
+// importing setting controller
+const settingcontroller = require("../controller/settings/addsetting")
+
+// dashboard controller
+const dashboardController = require('../controller/dashboard/dashboard');
+
 // make basic routes
 router.get('/', (req, res) => res.send('Hello World!'))
 router.get('/home', (req, res) => res.send('Home page'))
@@ -96,6 +105,19 @@ router.post("/stockout/add/:productId", Middleware.ensureAuthenticated, addstock
 router.get("/stockout/view", Middleware.ensureAuthenticated, viewstockoutcontroller.viewStockOut)
 router.put("/stockout/update/:stockOutId", Middleware.ensureAuthenticated, updatestockoutcontroller.updateStockOutStatus)
 router.delete("/stockout/delete/:stockOutId", Middleware.ensureAuthenticated, deletestockoutcontroller.delete)
+
+// dashboard routes
+router.get("/dashboard/length",Middleware.ensureAuthenticated,lengthcontroller.lengthdetails)
+
+// setting routes
+router.put("/settings/update",settingcontroller.updatesetting)
+router.get("/settings", settingcontroller.getSettings);
+
+// dashboard routes 
+// Get dashboard overview
+router.get('/dashboard/overview', dashboardController.getDashboardOverview);
+router.get('/dashboard/sales', dashboardController.getSalesData);
+router.get('/dashboard/inventory', dashboardController.getInventoryStatus);
 
 // Create a new customer
 router.post('/customer/add', async (req, res) => {
@@ -157,8 +179,9 @@ router.post('/customer/add', async (req, res) => {
 
 // Get all customers
 router.get('/customer/view', async (req, res) => {
+    const companyId = req.session.company;
     try {
-        const customers = await CustomerModel.find().populate('company');
+        const customers = await CustomerModel.find({company:companyId}).populate('company');
         res.status(200).json({ success: true, customers });
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });

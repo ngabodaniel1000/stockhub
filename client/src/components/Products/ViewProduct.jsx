@@ -55,7 +55,7 @@ const ViewProduct = () => {
   if (!product) return <div className="text-center p-4">Product not found</div>;
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 min-h-screen">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">Product Details</h1>
         <div className="flex gap-2">
@@ -74,7 +74,7 @@ const ViewProduct = () => {
         </div>
       </div>
 
-      <div className="bg-white shadow-md rounded-lg p-6">
+      <div className="mt-10 bg-white shadow-md rounded-lg p-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <h2 className="text-xl font-semibold mb-2">{product.productname}</h2>

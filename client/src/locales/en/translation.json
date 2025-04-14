@@ -1,0 +1,5 @@
+{
+    "message":"Hello world",
+    "Home":"Homepage",
+    "Links":["Dashboard","Notification","Products","Category","Stockin","Stockout","Customers","Suppliers","Settings"]
+}

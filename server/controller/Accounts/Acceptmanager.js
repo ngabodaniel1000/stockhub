@@ -1,6 +1,7 @@
 // Import required models
 const Manager = require('../../model/Accounts/Managersmodel');
 const Company = require('../../model/company/company');
+const Setting = require('../../model/settings/Settings');
 
 // Function to accept/activate manager
 exports.acceptManager = async (req, res) => {
@@ -60,6 +61,8 @@ exports.acceptManager = async (req, res) => {
         // Update manager's active status
         manager.active = true;
         await manager.save();
+
+            
 
         return res.status(200).json({
             success: true,

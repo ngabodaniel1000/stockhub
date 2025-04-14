@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
-const Products = () => {
+const Products = ({t,darkmode}) => {
   // State management
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -122,10 +122,10 @@ const Products = () => {
   if (error) return <div className="text-center text-red-500 p-4">{error}</div>;
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 min-h-screen">
       {/* Header Section */}
       <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold">Products</h1>
+        <h2 className="text-2xl font-bold">{t("message")}</h2>
         <div className="flex gap-2">
           <Link to="/stock" className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
             Stock Management
@@ -137,11 +137,11 @@ const Products = () => {
       </div>
       
       {/* Search and Filter Section */}
-      <div className="mb-6 bg-gray-50 p-4 rounded-lg shadow-sm">
+      <div className={`mb-6 p-4 rounded-lg shadow-sm`}>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Search Input */}
           <div>
-            <label htmlFor="search" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="search" className={`block text-sm font-medium ${darkmode ? 'text-white':'text-gray-700'}  mb-1`}>
               Search Products
             </label>
             <input
@@ -156,7 +156,7 @@ const Products = () => {
           
           {/* Category Filter */}
           <div>
-            <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="category" className={` ${darkmode ? 'text-white':'text-gray-700'} block text-sm font-medium text-gray-700 mb-1`}>
               Filter by Category
             </label>
             <select
@@ -176,7 +176,7 @@ const Products = () => {
           
           {/* Sort Options */}
           <div>
-            <label htmlFor="sort" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="sort" className={`${darkmode ? 'text-white':'text-gray-700'} block text-sm font-medium text-gray-700 mb-1`}>
               Sort By
             </label>
             <select
@@ -197,7 +197,7 @@ const Products = () => {
       </div>
       
       {/* Results Count */}
-      <div className="mb-4 text-sm text-gray-600">
+      <div className={`mb-4 text-sm ${darkmode ? 'text-white':'text-gray-700'}`}>
         Showing {filteredProducts.length} of {products.length} products
       </div>
       
@@ -205,9 +205,9 @@ const Products = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {filteredProducts.map((product) => (
           <div key={product._id} className="border rounded-lg p-4 shadow-md hover:shadow-lg transition-shadow">
-            <h2 className="text-xl font-semibold mb-2">{product.productname}</h2>
-            <p className="text-gray-600 mb-2">Quantity: {product.quantity}</p>
-            <p className="text-gray-600 mb-4">Category: {product.category?.categoryname || 'Uncategorized'}</p>
+            <h2 className={`${darkmode ? 'text-white':'text-black'} text-xl font-semibold mb-2`}>{product.productname}</h2>
+            <p className={`${darkmode ? 'text-white':'text-gray-700'} mb-2`}>Quantity: {product.quantity}</p>
+            <p className={`${darkmode ? 'text-white':'text-gray-700'} mb-4`}>Category: {product.category?.categoryname || 'Uncategorized'}</p>
             <div className="flex gap-2 flex-wrap">
               <Link
                 to={`/product/viewsingleitem/${product._id}`}
@@ -217,7 +217,7 @@ const Products = () => {
               </Link>
               <Link
                 to={`/product/update/${product._id}`}
-                className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 text-sm"
+                className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 text-sm"
               >
                 Update
               </Link>
@@ -227,7 +227,11 @@ const Products = () => {
               >
                 Delete
               </Link>
-              <Link
+              
+              
+            </div>
+            <div className='flex mt-2 gap-2 flex-wrap'>
+            <Link
                 to={`/stock/add/${product._id}`}
                 className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 text-sm"
               >

@@ -54,7 +54,7 @@ function Category() {
     console.log(category);
 
     return (
-        <div>
+        <div className='min-h-screen'>
             <h1>Category</h1>
             <a href="/category/add" className='text-blue-900'>Add New Category</a>
             {error && <p style={{ color: 'red' }}>{error}</p>} {/* Display error message if any */}

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const AddStockOut = () => {
+const AddStockOut = ({darkmode}) => {
     const { productId } = useParams();
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
@@ -75,13 +75,13 @@ const AddStockOut = () => {
     if (!product) return <div className="text-center p-4">Product not found</div>;
 
     return (
-        <div className="container mx-auto px-4 py-8">
-            <h1 className="text-2xl font-bold mb-6">Process Stock Out for {product.productname}</h1>
-            <p className="mb-4">Current Stock: {product.quantity}</p>
+        <div className="container mx-auto px-4 py-8 min-h-screen">
+            <h1 className={`${darkmode? "text-white" : "text-black"} text-2xl font-bold mt-10 lg:ml-[200px] mb-4`}>Process Stock Out for {product.productname}</h1>
+            <p className={`${darkmode? "text-white" : "text-black"} mb-10 md:ml-[200px]`}>Current Stock: {product.quantity}</p>
             
-            <form onSubmit={handleSubmit} className="max-w-md bg-white p-6 rounded-lg shadow-md">
+            <form onSubmit={handleSubmit} className={`${darkmode ?"shadow-sm shadow-gray-50":""} max-w-md p-10 rounded-lg shadow-md lg:ml-[200px]`}>
                 <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="quantity">
+                    <label className={`block ${darkmode?"text-white":"text-gray-700"}  text-sm font-bold mb-2`} htmlFor="quantity">
                         Quantity
                     </label>
                     <input
@@ -98,7 +98,7 @@ const AddStockOut = () => {
                 </div>
 
                 <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="customer">
+                    <label className={`block ${darkmode?"text-white":"text-gray-700"}  text-sm font-bold mb-2`} htmlFor="customer">
                         Customer (Optional)
                     </label>
                     <select
@@ -119,7 +119,7 @@ const AddStockOut = () => {
                 </div>
 
                 <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="reason">
+                    <label className={`block ${darkmode?"text-white":"text-gray-700"} text-sm font-bold mb-2`} htmlFor="reason">
                         Reason
                     </label>
                     <select

@@ -2,6 +2,7 @@
 const { default: mongoose } = require("mongoose");
 const Manager = require("../../model/Accounts/Managersmodel");
 const Company = require("../../model/company/company");
+const Setting = require("../../model/settings/Settings")
 
 // Function to validate login
 exports.validateLogin = async (req, res) => {
@@ -110,6 +111,10 @@ exports.registermanager = async(req, res) => {
 
     // Save the manager
     const savedManager = await newManager.save();
+
+    const setting = await new Setting({manager:savedManager._id,darkmode:true})
+    setting.save()
+    
 
     // Add manager to company's managers array
     companyExists.managers.push({ 

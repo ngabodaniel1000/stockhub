@@ -74,7 +74,7 @@ const UpdateSupplier = () => {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="max-w-md">
+<form onSubmit={handleSubmit} className="max-w-md">
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2">
             Supplier Name
@@ -134,7 +134,7 @@ const UpdateSupplier = () => {
             disabled={loading}
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
           >
-            {loading ? 'Updating...' : 'Update Supplier'}
+            {loading ? 'Adding...' : 'Add Supplier'}
           </button>
           <button
             type="button"

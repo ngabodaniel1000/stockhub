@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 
-function AdminNotification() {
+function AdminNotification({darkmode}) {
     const [notifications, setNotifications] = useState([]);
     const [unreadCount, setUnreadCount] = useState(0);
     const [loading, setLoading] = useState(true);
@@ -62,7 +62,7 @@ function AdminNotification() {
     }, []);
 
     return (
-        <div className="container mx-auto p-4">
+        <div className="container mx-auto p-4 min-h-screen">
             <ToastContainer
                 position="top-right"
                 autoClose={5000}
@@ -90,14 +90,14 @@ function AdminNotification() {
             </div>
 
             {/* Notifications List */}
-            <div className="bg-white shadow rounded-lg p-6">
-                <h3 className="text-xl font-semibold mb-4">Pending Approvals</h3>
+            <div className={`${darkmode ? 'bg-[#0a090e]' : 'bg-white'} shadow rounded-lg p-6`}>
+                <h3 className={` ${darkmode? 'text-white' : '' } text-xl font-semibold mb-4"`}>Pending Approvals</h3>
                 {loading ? (
                     <div className="flex justify-center">
                         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
                     </div>
                 ) : notifications.length === 0 ? (
-                    <p className="text-gray-500 text-center">No pending approvals</p>
+                    <p className="text-gray-500 font-bold text-center">No pending approvals</p>
                 ) : (
                     <div className="space-y-4">
                         {notifications.map((notification) => (

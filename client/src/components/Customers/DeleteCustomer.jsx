@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 
-const DeleteCustomer = () => {
+const DeleteCustomer = (darkmode) => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [customer, setCustomer] = useState(null);
@@ -48,7 +48,7 @@ const DeleteCustomer = () => {
   if (!customer) return <div className="text-center p-4">Customer not found</div>;
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 min-h-screen">
       <h1 className="text-2xl font-bold mb-4">Delete Customer</h1>
       <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md">
         <h2 className="text-xl font-semibold mb-4">Are you sure you want to delete this customer?</h2>

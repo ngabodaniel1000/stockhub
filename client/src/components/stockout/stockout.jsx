@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
-const Stockout = () => {
+const Stockout = ({darkmode}) => {
     const [stockOut, setStockOut] = useState([]);
     const [filteredStockOut, setFilteredStockOut] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -115,7 +115,7 @@ const Stockout = () => {
     if (error) return <div className="text-center text-red-500 p-4">{error}</div>;
 
     return (
-        <div className="container mx-auto p-4">
+        <div className="container mx-auto p-4 min-h-screen">
             <div className="flex justify-between items-center mb-4">
                 <h1 className="text-2xl font-bold">Stock Out Management</h1>
                 <div className="flex gap-2">
@@ -128,10 +128,10 @@ const Stockout = () => {
                 </div>
             </div>
 
-            <div className="mb-6 bg-gray-50 p-4 rounded-lg shadow-sm">
+            <div className="mb-6 p-4 rounded-lg shadow-sm">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
-                        <label htmlFor="search" className="block text-sm font-medium text-gray-700 mb-1">
+                        <label htmlFor="search" className={`block ${darkmode?"text-white":"text-gray-700"}  text-sm font-bold mb-2`}>
                             Search Products
                         </label>
                         <input
@@ -145,7 +145,7 @@ const Stockout = () => {
                     </div>
 
                     <div>
-                        <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-1">
+                        <label htmlFor="status" className={`block ${darkmode?"text-white":"text-gray-700"}  text-sm font-bold mb-2`}>
                             Filter by Status
                         </label>
                         <select
@@ -162,7 +162,7 @@ const Stockout = () => {
                     </div>
 
                     <div>
-                        <label htmlFor="sort" className="block text-sm font-medium text-gray-700 mb-1">
+                        <label htmlFor="sort" className={`block ${darkmode?"text-white":"text-gray-700"}  text-sm font-bold mb-2`}>
                             Sort By
                         </label>
                         <select
@@ -180,23 +180,23 @@ const Stockout = () => {
                 </div>
             </div>
 
-            <div className="mb-4 text-sm text-gray-600">
+            <div className={`block ${darkmode?"text-white":"text-gray-700"}  text-sm font-normal mb-2`}>
                 Showing {filteredStockOut.length} of {stockOut.length} stock out entries
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {filteredStockOut.map((item) => (
                     <div key={item._id} className="border rounded-lg p-4 shadow-md hover:shadow-lg transition-shadow">
-                        <h2 className="text-xl font-semibold mb-2">{item.product?.productname}</h2>
-                        <p className="text-gray-600 mb-2">Quantity: {item.quantity}</p>
+                       <h2 className={`block ${darkmode?"text-white":"text-gray-700"} text-md font-bold mb-2`}>{item.product?.productname}</h2>
+                       <p className={`block ${darkmode ? "text-white" : "text-gray-700"} text-md mb-2`}>Quantity: {item.quantity}</p>
                         {item.customer && (
-                            <p className="text-gray-600 mb-2">Customer: {item.customer?.name}</p>
+                            <p className={`block ${darkmode?"text-white":"text-gray-700"}  text-sm font-normal mb-2`}>Customer: {item.customer?.name}</p>
                         )}
-                        <p className="text-gray-600 mb-2">Processed By: {item.processedBy?.username}</p>
-                        <p className="text-gray-600 mb-2">
+                        <p className={`block ${darkmode?"text-white":"text-gray-700"}  text-sm font-normal mb-2`}>Processed By: {item.processedBy?.username}</p>
+                        <p className={`block ${darkmode?"text-white":"text-gray-700"}  text-sm font-normal mb-2`}>
                             Reason: <span className="capitalize">{item.reason}</span>
                         </p>
-                        <p className="text-gray-600 mb-2">
+                        <p className={`block ${darkmode?"text-white":"text-gray-700"}  text-sm font-normal mb-2`}>
                             Status:
                             {item.status === 'pending' && (
                                 <span className="ml-2 px-2 inline-flex text-md leading-5 font-semibold bg-yellow-100 text-yellow-800 rounded-full">{item.status}</span>
@@ -208,7 +208,7 @@ const Stockout = () => {
                                 <span className="ml-2 px-2 inline-flex text-md leading-5 font-semibold bg-red-100 text-red-800 rounded-full">{item.status}</span>
                             )}
                         </p>
-                        <p className="text-gray-600 mb-4">
+                        <p className={`block ${darkmode?"text-white":"text-gray-700"}  text-sm font-normal mb-2`}>
                             Date: {new Date(item.createdAt).toLocaleDateString()}
                         </p>
 

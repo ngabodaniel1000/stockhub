@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const AddProduct = () => {
+const AddProduct = ({darkmode}) => {
   const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
   const [formData, setFormData] = useState({
@@ -67,8 +67,8 @@ const AddProduct = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Add New Product</h1>
+    <div className="container mx-auto p-4 min-h-screen">
+      <h1 className={`${darkmode? "text-white" : "text-black"} text-2xl font-bold mt-10 lg:ml-[200px] mb-10`}>Add New Product</h1>
       
       {error && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
@@ -76,9 +76,9 @@ const AddProduct = () => {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="max-w-lg">
+<form onSubmit={handleSubmit} className={`${darkmode ?"shadow-sm shadow-gray-50":""} max-w-md p-10 rounded-lg shadow-md lg:ml-[200px]`}>
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
+        <label className={`block ${darkmode?"text-white":"text-gray-700"}  text-sm font-bold mb-2`}>
             Product Name
           </label>
           <input
@@ -92,7 +92,7 @@ const AddProduct = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
+        <label className={`block ${darkmode?"text-white":"text-gray-700"}  text-sm font-bold mb-2`}>
             Description
           </label>
           <textarea
@@ -105,7 +105,7 @@ const AddProduct = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
+        <label className={`block ${darkmode?"text-white":"text-gray-700"}  text-sm font-bold mb-2`}>
             Quantity
           </label>
           <input
@@ -119,7 +119,7 @@ const AddProduct = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
+        <label className={`block ${darkmode?"text-white":"text-gray-700"}  text-sm font-bold mb-2`}>
             Category
           </label>
           <select
@@ -139,7 +139,7 @@ const AddProduct = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
+          <label className={`block ${darkmode?"text-white":"text-gray-700"}  text-sm font-bold mb-2`}>
             Image URL
           </label>
           <input
