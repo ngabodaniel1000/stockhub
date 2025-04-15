@@ -29,7 +29,7 @@ const Products = ({t,darkmode}) => {
         setCategories(response.data.allcategories);
       }
     } catch (err) {
-      setError('Failed to fetch categories');
+      // setError('Failed to fetch categories');
       console.error('Error fetching categories:', err);
     }
   };
@@ -119,13 +119,13 @@ const Products = ({t,darkmode}) => {
 
   // Loading and error states
   if (loading) return <div className="text-center p-4">Loading...</div>;
-  if (error) return <div className="text-center text-red-500 p-4">{error}</div>;
+  if (error) return <div className="text-center min-h-screen text-red-500 p-4">{error}</div>;
 
   return (
     <div className="container mx-auto p-4 min-h-screen">
       {/* Header Section */}
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold">{t("message")}</h2>
+        <h2 className={`${darkmode? "text-white" : "text-black"} text-2xl font-bold mt-10 mb-10`}>{t("Products")}</h2>
         <div className="flex gap-2">
           <Link to="/stock" className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
             Stock Management

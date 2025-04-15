@@ -3,7 +3,6 @@ import axios from 'axios';
 
 function Setting({ darkmode, toggleDarkMode }) {
     const [settings, setSettings] = useState({
-        darkmode: darkmode,
         stockminlevel: 5,
         language: 'en'
     });
@@ -19,7 +18,10 @@ function Setting({ darkmode, toggleDarkMode }) {
                 withCredentials: true
             });
             if (response.data.success) {
-                setSettings(response.data.settings);
+                setSettings({
+                    stockminlevel: response.data.settings.stockminlevel,
+                    language: response.data.settings.language
+                });
             }
         } catch (error) {
             alert('Failed to load settings', 'error');
@@ -38,14 +40,11 @@ function Setting({ darkmode, toggleDarkMode }) {
             );
             
             if (response.data.success) {
-                setSettings(prev => ({ ...prev, [field]: value }));
-                
-                // If updating darkmode, call the toggle function from parent
-                if (field === 'darkmode') {
-                    toggleDarkMode(value);
+                if (field !== 'darkmode') {
+                    setSettings(prev => ({ ...prev, [field]: value }));
                 }
-                
                 alert('Settings updated successfully', 'success');
+                window.location.reload(); // Reload to apply changes
             }
         } catch (error) {
             alert('Failed to update settings', 'error');
@@ -56,33 +55,35 @@ function Setting({ darkmode, toggleDarkMode }) {
     if (loading) return <div>Loading settings...</div>;
 
     return (
-        <div className={`min-h-screen p-8 ${settings.darkmode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'}`}>
+        <div className={`min-h-screen p-8 ${darkmode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'}`}>
             <h1 className="text-3xl font-bold mb-8">Settings</h1>
             
             <div className="max-w-2xl">
                 {/* Theme Selection */}
-                <div className={`flex items-center justify-between p-4 rounded-lg mb-4 ${settings.darkmode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+                <div className={`flex items-center justify-between p-4 rounded-lg mb-4 ${darkmode ? 'bg-gray-800' : 'bg-gray-100'}`}>
                     <div>
                         <h2 className="text-xl font-semibold mb-2">Theme</h2>
-                        <p className={settings.darkmode ? 'text-gray-300' : 'text-gray-600'}>
+                        <p className={darkmode ? 'text-gray-300' : 'text-gray-600'}>
                             Choose your preferred theme
                         </p>
                     </div>
-                    <select 
-                        value={settings.darkmode ? 'dark' : 'light'} 
-                        onChange={(e) => handleUpdate('darkmode', e.target.value === 'dark')}
-                        className={`border rounded-lg p-2 ${settings.darkmode ? 'bg-gray-700 text-white' : 'bg-white text-black'}`}
+                    <button 
+                        onClick={() => {
+                            const newMode = !darkmode;
+                            handleUpdate('darkmode', newMode);
+                            toggleDarkMode(newMode);
+                        }}
+                        className={`px-4 py-2 rounded-lg ${darkmode ? 'bg-blue-600 text-white' : 'bg-blue-500 text-white'} hover:opacity-90`}
                     >
-                        <option value="light">Light Mode</option>
-                        <option value="dark">Dark Mode</option>
-                    </select>
+                        {darkmode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+                    </button>
                 </div>
 
                 {/* Stock level Settings */}
-                <div className={`flex items-center justify-between p-4 rounded-lg mb-4 ${settings.darkmode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+                <div className={`flex items-center justify-between p-4 rounded-lg mb-4 ${darkmode ? 'bg-gray-800' : 'bg-gray-100'}`}>
                     <div>
                         <h2 className="text-xl font-semibold mb-2">Stock Minimum Level</h2>
-                        <p className={settings.darkmode ? 'text-gray-300' : 'text-gray-600'}>
+                        <p className={darkmode ? 'text-gray-300' : 'text-gray-600'}>
                             Set minimum stock level alert
                         </p>
                     </div>
@@ -93,11 +94,11 @@ function Setting({ darkmode, toggleDarkMode }) {
                             onChange={(e) => setSettings(prev => ({ ...prev, stockminlevel: e.target.value }))}
                             min="1"
                             max="100"
-                            className={`border rounded-lg p-2 w-20 ${settings.darkmode ? 'bg-gray-700 text-white' : 'bg-white text-black'}`}
+                            className={`border rounded-lg p-2 w-20 ${darkmode ? 'bg-gray-700 text-white' : 'bg-white text-black'}`}
                         />
                         <button 
                             onClick={() => handleUpdate('stockminlevel', settings.stockminlevel)}
-                            className={`px-4 py-2 rounded-lg ${settings.darkmode ? 'bg-blue-600 text-white' : 'bg-blue-500 text-white'} hover:opacity-90`}
+                            className={`px-4 py-2 rounded-lg ${darkmode ? 'bg-blue-600 text-white' : 'bg-blue-500 text-white'} hover:opacity-90`}
                         >
                             Update
                         </button>
@@ -105,17 +106,17 @@ function Setting({ darkmode, toggleDarkMode }) {
                 </div>
 
                 {/* Language Selection */}
-                <div className={`flex items-center justify-between p-4 rounded-lg mb-4 ${settings.darkmode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+                <div className={`flex items-center justify-between p-4 rounded-lg mb-4 ${darkmode ? 'bg-gray-800' : 'bg-gray-100'}`}>
                     <div>
                         <h2 className="text-xl font-semibold mb-2">Language</h2>
-                        <p className={settings.darkmode ? 'text-gray-300' : 'text-gray-600'}>
+                        <p className={darkmode ? 'text-gray-300' : 'text-gray-600'}>
                             Select your preferred language
                         </p>
                     </div>
                     <select 
                         value={settings.language}
                         onChange={(e) => handleUpdate('language', e.target.value)}
-                        className={`border rounded-lg p-2 ${settings.darkmode ? 'bg-gray-700 text-white' : 'bg-white text-black'}`}
+                        className={`border rounded-lg p-2 ${darkmode ? 'bg-gray-700 text-white' : 'bg-white text-black'}`}
                     >
                         <option value="kny">Kinyarwanda</option>
                         <option value="en">English</option>

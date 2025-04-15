@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const AddSupplier = () => {
+const AddSupplier = ({darkmode}) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
@@ -41,7 +41,7 @@ const AddSupplier = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Add New Supplier</h1>
+      <h1 className={`${darkmode? "text-white" : "text-black"} lg:text-lg font-bold mt-10 ml-20 lg:ml-[200px] mb-10`}>Add New Supplier</h1>
       
       {error && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
@@ -49,9 +49,9 @@ const AddSupplier = () => {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="max-w-md">
+<form onSubmit={handleSubmit} className={`${darkmode ?"shadow-sm shadow-gray-50":""} max-w-md p-10 rounded-lg shadow-md lg:ml-[200px]`}>
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
+          <label className={`block ${darkmode?"text-white":"text-gray-700"}  text-sm font-bold mb-2`}>
             Supplier Name
           </label>
           <input
@@ -65,7 +65,7 @@ const AddSupplier = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
+          <label className={`block ${darkmode?"text-white":"text-gray-700"}  text-sm font-bold mb-2`}>
             Contact Email
           </label>
           <input
@@ -78,7 +78,7 @@ const AddSupplier = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
+          <label className={`block ${darkmode?"text-white":"text-gray-700"}  text-sm font-bold mb-2`}>
             Phone
           </label>
           <input
@@ -91,7 +91,7 @@ const AddSupplier = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
+          <label className={`block ${darkmode?"text-white":"text-gray-700"}  text-sm font-bold mb-2`}>
             Address
           </label>
           <textarea

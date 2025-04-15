@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
-const Stockout = ({darkmode}) => {
+const Stockout = ({darkmode,tr}) => {
     const [stockOut, setStockOut] = useState([]);
     const [filteredStockOut, setFilteredStockOut] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -117,7 +117,7 @@ const Stockout = ({darkmode}) => {
     return (
         <div className="container mx-auto p-4 min-h-screen">
             <div className="flex justify-between items-center mb-4">
-                <h1 className="text-2xl font-bold">Stock Out Management</h1>
+                <h1 className={`${darkmode? "text-white" : "text-black"} text-2xl font-bold mt-10 mb-10`}>{tr("stockout")} Management</h1>
                 <div className="flex gap-2">
                     <Link to="/products" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
                         Back to Products

@@ -112,8 +112,8 @@ exports.registermanager = async(req, res) => {
     // Save the manager
     const savedManager = await newManager.save();
 
-    const setting = await new Setting({manager:savedManager._id,darkmode:true})
-    setting.save()
+    // const setting = await new Setting({manager:savedManager._id,darkmode:true})
+    // setting.save()
     
 
     // Add manager to company's managers array

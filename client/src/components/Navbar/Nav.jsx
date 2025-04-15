@@ -38,6 +38,40 @@ import i18 from '../../locales/translation/i18next.jsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
+// Protected Route Component
+const ProtectedRoute = ({ element, allowedRoles = [], ...props }) => {
+  const [authStatus, setAuthStatus] = useState({ loading: true, loggedIn: false, role: null });
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const response = await axios.get("http://localhost:8889/api/dashboard", {
+          withCredentials: true,
+        });
+        
+        if (!response.data.loggedIn) {
+          navigate("/");
+        } else if (allowedRoles.length > 0 && !allowedRoles.includes(response.data.role)) {
+          navigate("/dashboard"); // Redirect to dashboard if role not allowed
+        } else {
+          setAuthStatus({ loading: false, loggedIn: true, role: response.data.role });
+        }
+      } catch (err) {
+        console.error("Error checking auth:", err);
+        navigate("/");
+      }
+    };
+    checkAuth();
+  }, [navigate, allowedRoles]);
+
+  if (authStatus.loading) {
+    return <div className="flex justify-center items-center h-screen">Loading...</div>;
+  }
+
+  return React.cloneElement(element, { ...props, role: authStatus.role });
+};
+
 function Nav() {
   const [userProfile, setUserProfile] = useState({});
   const [error, setError] = useState(null);
@@ -55,9 +89,7 @@ function Nav() {
           withCredentials: true,
         });
 
-        if (!profileResponse.data.loggedIn) {
-          // Not logged in logic
-        } else {
+        if (profileResponse.data.loggedIn) {
           setUserProfile(profileResponse.data);
 
           const settingsResponse = await axios.get('http://localhost:8889/api/settings', {
@@ -108,7 +140,10 @@ function Nav() {
     setMobileMenuOpen(!mobileMenuOpen);
   };
 
-  const showNav = location.pathname !== '/' && location.pathname !== '/adminregister' && location.pathname !== '/managerlogin' && location.pathname !== '/managerregister';
+  const showNav = location.pathname !== '/' && 
+                  location.pathname !== '/adminregister' && 
+                  location.pathname !== '/managerlogin' && 
+                  location.pathname !== '/managerregister';
 
   return (
     <div className={`${darkmode ? 'bg-[#0a090e]' : 'bg-white'} flex flex-cols h-[100%] overflow-auto relative`}>
@@ -152,44 +187,48 @@ function Nav() {
         )}
 
         <Routes>
-          {/* Your full route list remains unchanged */}
+          {/* Public routes */}
           <Route path="/" element={<Login />} />
-          <Route path="/profile" element={<Profile darkmode={darkmode} />} />
-          <Route path="/dashboard" element={<Dashboard darkmode={darkmode} />} />
-          <Route path="/category" element={<Category darkmode={darkmode} />} />
-          <Route path="/category/viewcategory/:categoryid" element={<ViewSingleCategory darkmode={darkmode} />} />
-          <Route path="/category/update/:categoryid" element={<UpdateCategory darkmode={darkmode} />} />
-          <Route path="/category/delete/:categoryid" element={<DeleteCategory darkmode={darkmode} />} />
-          <Route path="/category/add" element={<AddCategory darkmode={darkmode} />} />
           <Route path="/managerlogin" element={<ManagerLogin />} />
           <Route path="/managerregister" element={<ManagerRegister />} />
-          {userProfile.role === "Admin" && <Route path="/notification" element={<AdminNotification darkmode={darkmode} />} />}
           <Route path="/adminregister" element={<AdminRegister />} />
-          <Route path="/updateprofile/:userId" element={<Updateprofile darkmode={darkmode} />} />
 
-          <Route path="/products" element={<Products t={t} darkmode={darkmode} />} />
-          <Route path="/product/add" element={<AddProduct darkmode={darkmode} />} />
-          <Route path="/product/viewsingleitem/:productId" element={<ViewProduct darkmode={darkmode} />} />
-          <Route path="/product/update/:productId" element={<UpdateProduct darkmode={darkmode} />} />
-          <Route path="/product/delete/:productId" element={<DeleteProduct darkmode={darkmode} />} />
+          {/* Protected routes */}
+          <Route path="/profile" element={<ProtectedRoute element={<Profile darkmode={darkmode} />} />} />
+          <Route path="/dashboard" element={<ProtectedRoute element={<Dashboard darkmode={darkmode} />} />} />
+          <Route path="/category" element={<ProtectedRoute element={<Category darkmode={darkmode} />} />} />
+          <Route path="/category/viewcategory/:categoryid" element={<ProtectedRoute element={<ViewSingleCategory darkmode={darkmode} />} />} />
+          <Route path="/category/update/:categoryid" element={<ProtectedRoute element={<UpdateCategory darkmode={darkmode} />} />} />
+          <Route path="/category/delete/:categoryid" element={<ProtectedRoute element={<DeleteCategory darkmode={darkmode} />} />} />
+          <Route path="/category/add" element={<ProtectedRoute element={<AddCategory darkmode={darkmode} />} allowedRoles={["Admin"]} />} />
+          
+          <Route path="/notification" element={<ProtectedRoute element={<AdminNotification darkmode={darkmode} />} allowedRoles={["Admin"]} />} />
+          
+          <Route path="/updateprofile/:userId" element={<ProtectedRoute element={<Updateprofile darkmode={darkmode} />} />} />
 
-          <Route path="/suppliers" element={<Suppliers darkmode={darkmode} />} />
-          <Route path="/supplier/add" element={<AddSupplier darkmode={darkmode} />} />
-          <Route path="/supplier/update/:supplierId" element={<UpdateSupplier darkmode={darkmode} />} />
-          <Route path="/supplier/delete/:supplierId" element={<DeleteSupplier darkmode={darkmode} />} />
+          <Route path="/products" element={<ProtectedRoute element={<Products t={t} darkmode={darkmode} />} />} />
+          <Route path="/product/add" element={<ProtectedRoute element={<AddProduct darkmode={darkmode} />} />} />
+          <Route path="/product/viewsingleitem/:productId" element={<ProtectedRoute element={<ViewProduct darkmode={darkmode} />} />} />
+          <Route path="/product/update/:productId" element={<ProtectedRoute element={<UpdateProduct darkmode={darkmode} />} />} />
+          <Route path="/product/delete/:productId" element={<ProtectedRoute element={<DeleteProduct darkmode={darkmode} />} />} />
 
-          <Route path="/stock" element={<Stock darkmode={darkmode} />} />
-          <Route path="/stock/add/:productId" element={<AddStock darkmode={darkmode} />} />
+          <Route path="/suppliers" element={<ProtectedRoute element={<Suppliers darkmode={darkmode} />} />} />
+          <Route path="/supplier/add" element={<ProtectedRoute element={<AddSupplier darkmode={darkmode} />} />} />
+          <Route path="/supplier/update/:supplierId" element={<ProtectedRoute element={<UpdateSupplier darkmode={darkmode} />} />} />
+          <Route path="/supplier/delete/:supplierId" element={<ProtectedRoute element={<DeleteSupplier darkmode={darkmode} />} />} />
 
-          <Route path="/stockout" element={<StockOut darkmode={darkmode} />} />
-          <Route path="/stockout/add/:productId" element={<AddStockOut darkmode={darkmode} />} />
+          <Route path="/stock" element={<ProtectedRoute element={<Stock darkmode={darkmode} tr={t}/>} />} />
+          <Route path="/stock/add/:productId" element={<ProtectedRoute element={<AddStock darkmode={darkmode}/>} />} />
 
-          <Route path="/customers" element={<Customers darkmode={darkmode} />} />
-          <Route path="/customer/add" element={<AddCustomer darkmode={darkmode} />} />
-          <Route path="/customer/update/:id" element={<UpdateCustomer darkmode={darkmode} />} />
-          <Route path="/customer/delete/:id" element={<DeleteCustomer darkmode={darkmode} />} />
+          <Route path="/stockout" element={<ProtectedRoute element={<StockOut darkmode={darkmode} tr={t}/>} />} />
+          <Route path="/stockout/add/:productId" element={<ProtectedRoute element={<AddStockOut darkmode={darkmode} />} />} />
 
-          <Route path='/settings' element={<Setting darkmode={darkmode} toggleDarkMode={toggleDarkMode} />} />
+          <Route path="/customers" element={<ProtectedRoute element={<Customers darkmode={darkmode} />} />} />
+          <Route path="/customer/add" element={<ProtectedRoute element={<AddCustomer darkmode={darkmode} />} />} />
+          <Route path="/customer/update/:id" element={<ProtectedRoute element={<UpdateCustomer darkmode={darkmode} />} />} />
+          <Route path="/customer/delete/:id" element={<ProtectedRoute element={<DeleteCustomer darkmode={darkmode} />} />} />
+
+          <Route path='/settings' element={<ProtectedRoute element={<Setting darkmode={darkmode} toggleDarkMode={toggleDarkMode} />} />} />
         </Routes>
       </div>
     </div>

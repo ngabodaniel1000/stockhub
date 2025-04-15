@@ -5,6 +5,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSun, faMoon } from '@fortawesome/free-solid-svg-icons';
 import 'react-toastify/dist/ReactToastify.css';
+import bg from "../../../assets/inventory graph.jfif"
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -92,9 +93,9 @@ function Login() {
       </div>
 
       {/* Image Section */}
-      <div className="hidden lg:block w-1/2">
+      <div className="hidden lg:block w-[50%]">
         <img
-          src="https://plus.unsplash.com/premium_photo-1681487767138-ddf2d67b35c1?fm=jpg&q=60&w=3000"
+          src={bg}
           alt="Login Visual"
           className="w-full h-full object-cover"
         />

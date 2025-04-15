@@ -5,6 +5,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSun, faMoon } from '@fortawesome/free-solid-svg-icons';
 import 'react-toastify/dist/ReactToastify.css';
+import bg from "../../../assets/inventory graph.jfif"
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -93,7 +94,7 @@ function Register() {
       {/* Image Section */}
       <div className="hidden lg:block w-1/2">
         <img
-          src="https://images.unsplash.com/photo-1581091012184-7c7473996d3d?auto=format&fit=crop&w=3000&q=80"
+          src={bg}
           alt="Register Visual"
           className="w-full h-full object-cover"
         />

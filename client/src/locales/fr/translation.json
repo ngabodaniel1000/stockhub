@@ -1,4 +1,7 @@
 {
     "message":"bonne monde",
+    "stockin":"Stock enterer",
+    "Products":"Produits",
+    "stockout":"Stock exterieur",
     "Links":["Dashboarde","Annonces","Produits","Categorie","Stockin","Stockout","Customers","Supplie","Settings"]
 }

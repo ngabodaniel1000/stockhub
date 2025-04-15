@@ -4,8 +4,8 @@ const schema = new mongoose.Schema({
     language: { 
         type: String, 
         required: false,
-        default: "english",
-        enum: ["english", "french", "kinyarwanda", "kiswahili"] 
+        default: "en",
+        enum: ["en", "fr", "kny", "ksw"] 
     },
     stockminlevel: { 
         type: Number, 

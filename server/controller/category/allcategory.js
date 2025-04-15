@@ -26,7 +26,7 @@ exports.viewcategory = async (req, res) => {
             });
         } else {
             // If no categories are found return a message
-            return res.status(404).json({ 
+            return res.status(400).json({ 
                 message: "No categories found for this company", 
                 success: false 
             });

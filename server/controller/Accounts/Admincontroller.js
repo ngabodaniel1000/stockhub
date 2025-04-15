@@ -47,9 +47,9 @@ exports.registeradmin = async(req, res) => {
     // Save the admin
     const savedAdmin = await newadmin.save();
 
-    // Update company's managers array with the new admin
-    savedCompany.managers.push({ managerid: savedAdmin._id });
-    await savedCompany.save();
+    // // Update company's managers array with the new admin
+    // savedCompany.managers.push({ managerid: savedAdmin._id });
+    // await savedCompany.save();
 
     res.status(201).json({
       success: true,
