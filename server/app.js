@@ -1,7 +1,10 @@
 // importing modules
 const express = require('express')
 const app = express()
-const port = 8889
+const dotenv = require('dotenv');
+dotenv.config({ path: './config.env' }); // Optional path if config.env isn't in the root folder
+const port = process.env.PORT || 8080;
+
 const Router = require('./router/router')
 const Databaseconnection = require("./database/databaseconnection")
 const ManagersModel = require("./model/Accounts/Managersmodel")

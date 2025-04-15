@@ -1,136 +1,189 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser, faEnvelope, faLock, faSun, faMoon, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Updateprofile() {
-    const [userProfile, setUserProfile] = useState([]); // Initialize with null for clarity
-      const [error, setError] = useState(null); // For error handling
-    useEffect(() => {
-        const fetchUserProfile = async () => {
-          try {
-            const response = await axios.get("http://localhost:8889/api/dashboard", {
-              withCredentials: true, // Send cookies with the request
-            });
-            if (!response.data.loggedIn) {
-              // Redirect to login if not logged in
-              navigate("/");
-            } else {
-              setUserProfile(response.data); // Set the profile data
-            }
-          } catch (err) {
-            setError("Failed to fetch user profile.");
-            console.error("Error fetching user profile:", err);
-            navigate("/"); // Redirect to login on error
-          }
-        };
-    
-        fetchUserProfile();
-      }, []);
-     // State to store form data
-      const [formData, setFormData] = useState({
+    const [userProfile, setUserProfile] = useState(null);
+    const [error, setError] = useState(null);
+    const [darkmode, setDarkmode] = useState(true);
+    const { userId } = useParams();
+    const navigate = useNavigate();
+
+    // Toggle dark mode
+    const handleToggleDarkMode = () => {
+        setDarkmode(!darkmode);
+    };
+
+    // Form data state
+    const [formData, setFormData] = useState({
         email: "",
         password: "",
-        role:"Admin",
-        company:"",
-        username:""
+        username: ""
+    });
 
+    // Fetch user profile data
+    useEffect(() => {
+        const fetchUserProfile = async () => {
+            try {
+                const response = await axios.get("http://localhost:8889/api/dashboard", {
+                    withCredentials: true,
+                });
+                if (!response.data.loggedIn) {
+                    navigate("/");
+                } else {
+                    setUserProfile(response.data);
+                    setFormData({
+                        email: response.data.email,
+                        username: response.data.user,
+                        password: ""
+                    });
+                }
+            } catch (err) {
+                setError("Failed to fetch user profile.");
+                console.error("Error fetching user profile:", err);
+                navigate("/");
+            }
+        };
 
-      });
-      const {userId} = useParams()
-    const updateprofile = async(e)=>{
+        fetchUserProfile();
+    }, [navigate]);
+
+    // Handle profile update
+    const updateprofile = async (e) => {
         e.preventDefault();
 
-        console.log("Submitting form with the following data:", formData);
-        try {
-            const response = await axios.put(`http://localhost:8889/api/account/updateprofile/${userId}`,{
-                formData
-            })
-            if (response) {
-                alert("profile data was updated")
-            }
-            
-        } catch (error) {
-           console.log(error);
-            
+        if (!formData.email || !formData.username) {
+            toast.error("Email and username are required", {
+                theme: darkmode ? 'dark' : 'light',
+            });
+            return;
         }
-       }
-       
-  return (
-    <div className="flex items-center justify-center min-h-screen">
-      <form
-        className="w-fit lg:w-[400px] rounded-sm flex flex-col gap-5 border-2 border-yellow h-fit p-5 text-md lg:text-lg"
-        onSubmit={updateprofile}
-      >
-        <div>
-          <h1 className="text-center font-bold text-xl">Update your profile</h1>
-        </div>
-        <div className="flex flex-col">
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            name="email"
-            defaultValue={userProfile.email}
-            onChange={(e) =>
-              setFormData({ ...formData, email: e.target.value })
+
+        try {
+            const response = await axios.put(
+                `http://localhost:8889/api/account/updateprofile/${userId}`,
+                formData,
+                { withCredentials: true }
+            );
+
+            if (response.data.success) {
+                toast.success("Profile updated successfully It will be applied as you logged in next time", {
+                    theme: darkmode ? 'dark' : 'light',
+                });
+                setTimeout(() => {
+                    navigate('/profile');
+                }, 2000);
             }
-            className="mt-4 w-full h-[32px] lg:h-[40px] bg-gray-100"
-            required
-          />
+        } catch (error) {
+            console.error(error);
+            toast.error(error.response?.data?.message || "Failed to update profile", {
+                theme: darkmode ? 'dark' : 'light',
+            });
+        }
+    };
+
+    return (
+        <div className={`flex min-h-screen ${darkmode ? 'bg-gray-900' : 'bg-blue-50'} transition-all`}>
+            <ToastContainer />
+
+            
+
+            {/* Form Section */}
+            <div className={`w-full flex items-center justify-center p-8 ${darkmode ? 'bg-[#0a090e]' : 'bg-white'}`}>
+                <div className="w-full max-w-md">
+                    <div className="text-center mb-8">
+                        <h1 className={`text-2xl font-bold ${darkmode ? 'text-white' : 'text-blue-900'}`}>
+                            Update Profile
+                        </h1>
+                        <p className={`mt-2 ${darkmode ? 'text-gray-300' : 'text-gray-600'}`}>
+                            Update your account information
+                        </p>
+                    </div>
+
+                    {error && (
+                        <div className={`mb-4 p-3 rounded-lg ${darkmode ? 'bg-red-900 text-red-100' : 'bg-red-100 text-red-800'}`}>
+                            {error}
+                        </div>
+                    )}
+
+                    <form onSubmit={updateprofile} className="space-y-6">
+                        {/* Username Field */}
+                        <div>
+                            <label htmlFor="username" className={`block text-sm font-medium ${darkmode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                Username
+                            </label>
+                            <div className="mt-1 relative">
+                                <div className={`absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none ${darkmode ? 'text-gray-400' : 'text-gray-500'}`}>
+                                    <FontAwesomeIcon icon={faUser} />
+                                </div>
+                                <input
+                                    type="text"
+                                    name="username"
+                                    value={formData.username}
+                                    onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                                    className={`block w-full pl-10 pr-3 py-3 rounded-lg ${darkmode ? 'bg-gray-800 text-white border-gray-700' : 'bg-white border-gray-300'} border`}
+                                    required
+                                />
+                            </div>
+                        </div>
+
+                        {/* Email Field */}
+                        <div>
+                            <label htmlFor="email" className={`block text-sm font-medium ${darkmode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                Email
+                            </label>
+                            <div className="mt-1 relative">
+                                <div className={`absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none ${darkmode ? 'text-gray-400' : 'text-gray-500'}`}>
+                                    <FontAwesomeIcon icon={faEnvelope} />
+                                </div>
+                                <input
+                                    type="email"
+                                    name="email"
+                                    value={formData.email}
+                                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                    className={`block w-full pl-10 pr-3 py-3 rounded-lg ${darkmode ? 'bg-gray-800 text-white border-gray-700' : 'bg-white border-gray-300'} border`}
+                                    required
+                                />
+                            </div>
+                        </div>
+
+                        {/* Password Field */}
+                        <div>
+                            <label htmlFor="password" className={`block text-sm font-medium ${darkmode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                New Password (leave blank to keep current)
+                            </label>
+                            <div className="mt-1 relative">
+                                <div className={`absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none ${darkmode ? 'text-gray-400' : 'text-gray-500'}`}>
+                                    <FontAwesomeIcon icon={faLock} />
+                                </div>
+                                <input
+                                    type="password"
+                                    name="password"
+                                    value={formData.password}
+                                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                                    className={`block w-full pl-10 pr-3 py-3 rounded-lg ${darkmode ? 'bg-gray-800 text-white border-gray-700' : 'bg-white border-gray-300'} border`}
+                                    placeholder="••••••••"
+                                />
+                            </div>
+                        </div>
+
+                        <div>
+                            <button
+                                type="submit"
+                                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700"
+                            >
+                                Update Profile
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-        <div className="flex flex-col">
-          <label htmlFor="Username">Username</label>
-          <input
-            type="text"
-            name="username"
-            defaultValue={userProfile.user}
-            onChange={(e) =>
-              setFormData({ ...formData, username: e.target.value })
-            }
-            className="mt-4 w-full h-[32px] lg:h-[40px] bg-gray-100"
-            // minLength={8}
-            required
-          />
-        </div>
-        <div className="flex flex-col">
-          <label htmlFor="companyname">Company name</label>
-          <input
-            type="text"
-            name="companyname"
-            defaultValue={userProfile.company}
-            onChange={(e) =>
-              setFormData({ ...formData, company: e.target.value })
-            }
-            className="mt-4 w-full h-[32px] lg:h-[40px] bg-gray-100"
-            // minLength={8}
-            required
-          />
-        </div>
-        <div className="flex flex-col">
-          <label htmlFor="password">Password</label>
-          <input
-            type="text"
-            name="password"
-            defaultValue={userProfile.password}
-            onChange={(e) =>
-              setFormData({ ...formData, password: e.target.value })
-            }
-            className="mt-4 w-full h-[32px] lg:h-[40px] bg-gray-100"
-            // minLength={8}
-            required
-          />
-        </div>
-        <div className="flex flex-col">
-          <button
-            type="submit"
-            className="mt-5 bg-blue-900 hover:bg-blue-700 h-[40px] lg:h-[50px] rounded-xl text-white"
-          >
-            Update profile
-          </button>
-        </div>
-      </form>
-    </div>
-   
-  )
+    );
 }
 
-export default Updateprofile
+export default Updateprofile;

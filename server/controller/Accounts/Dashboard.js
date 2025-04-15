@@ -9,6 +9,7 @@ exports.dashboard = async (req, res) => {
           email: req.session.email,
           password: req.session.password,
           role: req.session.role,
+          company:req.session.company,
           userId: req.session.Userid, // Return the correct MongoDB _id
         });
       } else {

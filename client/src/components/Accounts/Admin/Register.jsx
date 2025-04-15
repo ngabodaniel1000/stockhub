@@ -11,7 +11,8 @@ function Register() {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
-    username: ''
+    username: '',
+    phone: ''
   });
 
   const [darkmode, setDarkmode] = useState(true);
@@ -24,7 +25,7 @@ function Register() {
   const handleRegister = async (event) => {
     event.preventDefault();
 
-    if (!formData.email || !formData.password || !formData.username) {
+    if (!formData.email || !formData.password || !formData.username || !formData.phone) {
       toast.error("Please fill in all fields", {
         theme: darkmode ? 'dark' : 'light',
       });
@@ -37,7 +38,8 @@ function Register() {
         {
           email: formData.email,
           password: formData.password,
-          username: formData.username
+          username: formData.username,
+          phone: formData.phone,
         },
         { withCredentials: true }
       );
@@ -136,6 +138,19 @@ function Register() {
                 name="email"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                className={`mt-1 block w-full px-4 py-3 rounded-lg ${darkmode ? 'bg-gray-800 text-white border-gray-700' : 'bg-white border-gray-300'} border`}
+                required
+              />
+            </div>
+            <div>
+              <label htmlFor="phone" className={`block text-sm font-medium ${darkmode ? 'text-gray-300' : 'text-gray-700'}`}>
+                Phone Number
+              </label>
+              <input
+                type="text"
+                name="phone"
+                value={formData.phone}
+                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                 className={`mt-1 block w-full px-4 py-3 rounded-lg ${darkmode ? 'bg-gray-800 text-white border-gray-700' : 'bg-white border-gray-300'} border`}
                 required
               />

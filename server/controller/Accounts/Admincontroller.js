@@ -4,10 +4,10 @@ const Company = require("../../model/company/company");
 
 // function to register company as admin
 exports.registeradmin = async(req, res) => {
-  const { email, password, username } = req.body;
+  const { email, password, username,phone } = req.body;
   
   // Validate input
-  if (!email || !password || !username) {
+  if (!email || !password || !username || !phone) {
     return res.status(400).json({ 
       success: false, 
       message: "Email, password and username are required" 
@@ -41,6 +41,7 @@ exports.registeradmin = async(req, res) => {
       password,
       role: 'Admin',
       active:true,
+      phone:phone,
       company: savedCompany._id  // Set company reference immediately
     });
 

@@ -11,6 +11,12 @@ const schema = new mongoose.Schema({
     email:{type:String, required:true,unique:true},
     role:{type:String, required:true,default:'manager'},
     active:{type:Boolean,default:false},
+    phone: {  // Add this field for SMS functionality
+        type: String,
+        required: [true, 'Phone number is required for OTP'],
+    },
+    resetPasswordOTP: String,
+    resetPasswordOTPExpires: Date
 },
 {timestamps:true}
 )

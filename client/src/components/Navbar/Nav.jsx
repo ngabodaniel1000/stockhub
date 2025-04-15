@@ -35,8 +35,23 @@ import Setting from '../Pages/Setting.jsx';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import i18 from '../../locales/translation/i18next.jsx';
+import { faBell, faChartDiagram, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import Guide from '../Pages/Guides.jsx';
+import Privacypolicy from '../Pages/Privacyplicy.jsx';
+import ChatBot from '../Pages/Chatbot.jsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import {
+  faBox,
+  faLayerGroup,
+  faBoxes,
+  faBoxOpen,
+  faUsers,
+  faTruck,
+  faCog,
+  faRobot
+} from '@fortawesome/free-solid-svg-icons';
+import ForgotPassword from '../Accounts/Password/Forgetpassword.jsx';
+import ResetPassword from '../Accounts/Password/Resetpassword.jsx';
 
 // Protected Route Component
 const ProtectedRoute = ({ element, allowedRoles = [], ...props }) => {
@@ -143,6 +158,8 @@ function Nav() {
   const showNav = location.pathname !== '/' && 
                   location.pathname !== '/adminregister' && 
                   location.pathname !== '/managerlogin' && 
+                  location.pathname !== '/forgetpassword' && 
+                  !location.pathname.startsWith('/reset-password/')&& 
                   location.pathname !== '/managerregister';
 
   return (
@@ -154,25 +171,66 @@ function Nav() {
           border-r border-gray-400 shadow-lg`}>
           <h2 className={`${darkmode ? 'text-white' : 'text-black'} text-3xl`}>Stockhub</h2>
           <ul className={`${darkmode ? 'text-white' : 'text-black'} mt-10`}>
-            <li className='mt-7'><a href='/dashboard'>{links[0]}</a></li>
-            {userProfile.role === "Admin" && <li className='mt-7'><a href="/notification">{links[1]}</a></li>}
-            <li className='mt-7'><a href='/products'>{links[2]}</a></li>
-            <li className='mt-7'><a href="/category">{links[3]}</a></li>
-            <li className='mt-7'><a href="/stock">{links[4]}</a></li>
-            <li className='mt-7'><a href="/stockout">{links[5]}</a></li>
-            <li className='mt-7'><a href="/customers">{links[6]}</a></li>
-            <li className='mt-7'><a href="/suppliers">{links[7]}</a></li>
-            <li className='mt-7'><a href="/settings">{links[8]}</a></li>
+            <li className='mt-6'><a href='/dashboard' className="flex items-center gap-2"><FontAwesomeIcon icon={faChartDiagram}/>{links[0]}</a></li>
+            {userProfile.role === "Admin" && <li className='mt-7'><a href="/notification" className="flex items-center gap-2"><FontAwesomeIcon icon={faBell} />{links[1]}</a></li>}
+            <li className='mt-6'>
+  <a href='/products' className="flex items-center gap-2">
+    <FontAwesomeIcon icon={faBox} />
+    {links[2]}
+  </a>
+</li>
+<li className='mt-6'>
+  <a href="/category" className="flex items-center gap-2">
+    <FontAwesomeIcon icon={faLayerGroup} />
+    {links[3]}
+  </a>
+</li>
+<li className='mt-6'>
+  <a href="/stock" className="flex items-center gap-2">
+    <FontAwesomeIcon icon={faBoxes} />
+    {links[4]}
+  </a>
+</li>
+<li className='mt-6'>
+  <a href="/stockout" className="flex items-center gap-2">
+    <FontAwesomeIcon icon={faBoxOpen} />
+    {links[5]}
+  </a>
+</li>
+<li className='mt-6'>
+  <a href="/customers" className="flex items-center gap-2">
+    <FontAwesomeIcon icon={faUsers} />
+    {links[6]}
+  </a>
+</li>
+<li className='mt-6'>
+  <a href="/suppliers" className="flex items-center gap-2">
+    <FontAwesomeIcon icon={faTruck} />
+    {links[7]}
+  </a>
+</li>
+<li className='mt-6'>
+  <a href="/settings" className="flex items-center gap-2">
+    <FontAwesomeIcon icon={faCog} />
+    {links[8]}
+  </a>
+</li>
+<li className='mt-6'>
+  <a href="/ask-ai" className="flex items-center gap-2">
+    <FontAwesomeIcon icon={faRobot} />
+    Ask AI
+  </a>
+</li>
           </ul>
         </nav>
       )}
 
       <div className={`${darkmode ? 'bg-[#0a090e]' : 'bg-white'} w-full md:ml-[240px] pb-10 ${mobileMenuOpen && showNav ? 'ml-[240px]' : 'ml-0'} transition-margin duration-300 ease-in-out`}>
         {showNav && (
-          <div className='bg-gray-800 w-full h-20 mt-2 flex justify-end items-center pr-4'>
+          <div className={`${darkmode ? 'bg-gray-800' : 'bg-gray-200'} w-full h-20 mt-2 flex justify-end items-center pr-4`}>
             <button
               onClick={() => toggleDarkMode(!darkmode)}
-              className={`p-2 rounded-full ${darkmode ? 'bg-gray-700 text-white' : 'bg-gray-200 text-black'}`}
+              className={`p-2 rounded-full ${darkmode ? 'bg-gray-700 text-white' : 'bg-gray- text-black'}`}
             >
               {darkmode ? '☀️ Light Mode' : '🌙 Dark Mode'}
             </button>
@@ -189,9 +247,12 @@ function Nav() {
         <Routes>
           {/* Public routes */}
           <Route path="/" element={<Login />} />
+          <Route path="//profile" element={<Profile darkmode={darkmode}/>} />
           <Route path="/managerlogin" element={<ManagerLogin />} />
           <Route path="/managerregister" element={<ManagerRegister />} />
           <Route path="/adminregister" element={<AdminRegister />} />
+          <Route path="/forgetpassword" element={<ForgotPassword />} />
+          <Route path="/reset-password/:email" element={<ResetPassword/>} />
 
           {/* Protected routes */}
           <Route path="/profile" element={<ProtectedRoute element={<Profile darkmode={darkmode} />} />} />
@@ -229,6 +290,9 @@ function Nav() {
           <Route path="/customer/delete/:id" element={<ProtectedRoute element={<DeleteCustomer darkmode={darkmode} />} />} />
 
           <Route path='/settings' element={<ProtectedRoute element={<Setting darkmode={darkmode} toggleDarkMode={toggleDarkMode} />} />} />
+          <Route path='/guides' element={<ProtectedRoute element={<Guide darkmode={darkmode} toggleDarkMode={toggleDarkMode} />} />} />
+          <Route path='/privacy' element={<ProtectedRoute element={<Privacypolicy darkmode={darkmode} toggleDarkMode={toggleDarkMode} />} />} />
+          <Route path='/ask-ai' element={<ProtectedRoute element={<ChatBot darkmode={darkmode} toggleDarkMode={toggleDarkMode} />} />} />
         </Routes>
       </div>
     </div>

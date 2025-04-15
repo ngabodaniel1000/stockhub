@@ -12,6 +12,8 @@ const Logoutcontroller = require("../controller/Accounts/logout")
 const Dashboardcontroller = require("../controller/Accounts/Dashboard")
 const Updateprofile = require("../controller/Accounts/Updateprofilecontroller")
 const Acceptmanager = require("../controller/Accounts/Acceptmanager")
+const forgetpasswordcontroller = require("../controller/Accounts/otpcontroller")
+const updateprofileController = require("../controller/Accounts/Updateprofilecontroller")
 
 // importing controller used in category operation
 const addcategorycontoller = require("../controller/category/addcategory")
@@ -72,6 +74,11 @@ router.put("/account/updateprofile/:managerid",Middleware.ensureAuthenticated,Up
 router.post('/account/managerregister',ManagerLogincontroller.registermanager)
 router.post('/account/acceptmanager/:managerId',Middleware.isAdmin,Acceptmanager.acceptManager)
 router.get('/account/viewpendingmanager',Middleware.isAdmin,Acceptmanager.getPendingManagers)
+router.put('/account/updateprofile/:managerid', updateprofileController.updateprofile);
+// Request password reset OTP
+router.post('/account/forgot-password',forgetpasswordcontroller.requestPasswordReset);
+// Reset password with OTP
+router.post('/account/reset-password',forgetpasswordcontroller.resetPassword);
 
 // all routes required in category operation
 router.post("/category/add/",Middleware.ensureAuthenticated,addcategorycontoller.addcategory)

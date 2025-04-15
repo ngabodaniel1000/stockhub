@@ -10,6 +10,7 @@
   "author": " <Ngdev/>",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "body-parser": "^1.20.3",
     "connect-mongo": "^5.1.0",
     "cors": "^2.8.5",
@@ -17,6 +18,8 @@
     "express": "^4.21.2",
     "express-session": "^1.18.1",
     "mongoose": "^8.9.5",
-    "nodemon": "^3.1.9"
+    "nodemon": "^3.1.9",
+    "otp-generator": "^4.0.1",
+    "twilio": "^5.5.2"
   }
 }

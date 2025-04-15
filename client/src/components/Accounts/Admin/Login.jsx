@@ -156,7 +156,7 @@ function Login() {
               </div>
 
               <div className="text-sm">
-                <a href="#" className={`font-medium ${darkmode ? 'text-blue-400' : 'text-blue-600'}`}>
+                <a href="/forgetpassword" className={`font-medium ${darkmode ? 'text-blue-400' : 'text-blue-600'}`}>
                   Forgot password?
                 </a>
               </div>

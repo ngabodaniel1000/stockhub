@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
+import { faBook, faShieldAlt, faUser } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 function Setting({ darkmode, toggleDarkMode }) {
     const [settings, setSettings] = useState({
@@ -57,8 +60,27 @@ function Setting({ darkmode, toggleDarkMode }) {
     return (
         <div className={`min-h-screen p-8 ${darkmode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'}`}>
             <h1 className="text-3xl font-bold mb-8">Settings</h1>
-            
-            <div className="max-w-2xl">
+
+            {/* Profile Link */}
+   {/* Profile Link - Fixed Width */}
+<div className={`max-w-2xl mx-auto p-4 rounded-lg mb-4 ${darkmode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+  <Link 
+    to="/profile" 
+    className={`flex items-center gap-3 p-3 rounded-lg transition-colors ${darkmode ? 'hover:bg-gray-700' : 'hover:bg-gray-200'}`}
+  >
+    <FontAwesomeIcon 
+      icon={faUser} 
+      className={`text-xl ${darkmode ? 'text-blue-400' : 'text-blue-600'}`} 
+    />
+    <div>
+      <h3 className="font-medium">Your Profile</h3>
+      <p className={`text-sm ${darkmode ? 'text-gray-400' : 'text-gray-600'}`}>
+        View and edit your profile information
+      </p>
+    </div>
+  </Link>
+</div>
+            <div className="max-w-2xl mx-auto">
                 {/* Theme Selection */}
                 <div className={`flex items-center justify-between p-4 rounded-lg mb-4 ${darkmode ? 'bg-gray-800' : 'bg-gray-100'}`}>
                     <div>
@@ -123,6 +145,44 @@ function Setting({ darkmode, toggleDarkMode }) {
                         <option value="fr">French</option>
                         <option value="ksw">Kiswahili</option>
                     </select>
+                </div>
+
+                {/* Resources Section */}
+                <div className={`p-4 rounded-lg mb-4 ${darkmode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+                    <h2 className="text-xl font-semibold mb-4">Resources</h2>
+                    
+                    {/* Guide Link */}
+                    <Link 
+                        to="/guides" 
+                        className={`flex items-center gap-3 p-3 rounded-lg mb-2 transition-colors ${darkmode ? 'hover:bg-gray-700' : 'hover:bg-gray-200'}`}
+                    >
+                        <FontAwesomeIcon 
+                            icon={faBook} 
+                            className={`text-xl ${darkmode ? 'text-blue-400' : 'text-blue-600'}`} 
+                        />
+                        <div>
+                            <h3 className="font-medium">User Guide</h3>
+                            <p className={`text-sm ${darkmode ? 'text-gray-400' : 'text-gray-600'}`}>
+                                Learn how to use our platform effectively
+                            </p>
+                        </div>
+                    </Link>
+                    {/* Privacy Link */}
+                    <Link 
+                        to="/privacy" 
+                        className={`flex items-center gap-3 p-3 rounded-lg mb-2 transition-colors ${darkmode ? 'hover:bg-gray-700' : 'hover:bg-gray-200'}`}
+                    >
+                        <FontAwesomeIcon 
+                            icon={faBook} 
+                            className={`text-xl ${darkmode ? 'text-blue-400' : 'text-blue-600'}`} 
+                        />
+                        <div>
+                            <h3 className="font-medium">User privacy</h3>
+                            <p className={`text-sm ${darkmode ? 'text-gray-400' : 'text-gray-600'}`}>
+                                Manage your privacy setting
+                            </p>
+                        </div>
+                    </Link>
                 </div>
             </div>
         </div>
