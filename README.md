@@ -1,10 +1,10 @@
-📦 # StockHub - Stock Management System
+# 📦 StockHub - Stock Management System <br>
 StockHub is a modern and responsive stock management system built to help businesses <br>
 efficiently manage their inventory, customers, sales, and suppliers. <br>
 Designed with simplicity and usability in mind, it includes insightful dashboards, smart analytics, and light/dark mode support.
 
 
-✨ ## Features
+## ✨Features
 🧾 Dashboard Overview: Displays key statistics (Total Products, Customers, Sales, Out of Stock).
 
 📦 Product Management: Add, view, update, and delete products.
@@ -21,7 +21,7 @@ Designed with simplicity and usability in mind, it includes insightful dashboard
 
 📊 Charts & Insights: Visualize top-selling products and inventory status.
 
-🛠️ ## Technologies Used
+## 🛠️ Technologies Used
 Frontend: React.js, Tailwind CSS
 
 Backend: Node.js, Express.js
@@ -34,11 +34,11 @@ Charts: Recharts.js
 
 Icons: FontAwesome, Lucide
 
-📸 ## Preview
+## 📸 Preview
 Light/Dark mode toggle, insightful graphs, and responsive design
 
 
-🚀 ## Installation
+## 🚀 Installation
 1. Clone the Repository
 bash
 Copy
@@ -49,11 +49,11 @@ cd stockhub
 bash
 Copy
 Edit
-# For backend
+### For backend
 cd server
 npm install
 
-# For frontend
+### For frontend
 cd ../client
 npm install
 3. Set Environment Variables
@@ -69,21 +69,21 @@ SESSION_SECRET=your_secret_key
 bash
 Copy
 Edit
-# In server/
+### In server/
 npm run dev
 
-# In client/
+### In client/
 npm start
 Open your browser at http://localhost:3000.
 
-🔐 ## Authentication
+## 🔐 Authentication
 Users must log in to access the system.
 
 Sessions are used to manage authentication.
 
 Admin approval required for account creation (optional feature).
 
-📈 ## Insights
+## 📈 Insights
 View top-selling products.
 
 Monitor inventory status (In Stock, Low Stock, Out of Stock).
