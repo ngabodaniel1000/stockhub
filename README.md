@@ -40,14 +40,11 @@ Light/Dark mode toggle, insightful graphs, and responsive design
 
 ## 🚀 Installation
 1. Clone the Repository
-bash
-Copy
 Edit
 git clone https://github.com/ngabodaniel1000/stockhub.git
 cd stockhub
 2. Install Dependencies
-bash
-Copy
+
 Edit
 ### For backend
 cd server
@@ -97,7 +94,7 @@ Email: ngabodaniel1000@gmail.com <br>
 GitHub: [ngabodaniel](https://github.com/ngabodaniel1000/)
 
 ## find bug ❓
-if you found an issue or bug in project feel free you can contact us on Email: nezahakim05@gmail.com
+if you found an issue or bug in project feel free you can contact us on Email: ngabodaniel1000@gmail.com
 
 ## author ✍️
 view the author of this readme file [Ngabo Daniel](https://www.linkedin.com/in/ngabo-daniel-011118283)

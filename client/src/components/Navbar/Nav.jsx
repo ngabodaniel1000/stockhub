@@ -34,7 +34,6 @@ import DeleteCustomer from '../Customers/DeleteCustomer.jsx';
 import Setting from '../Pages/Setting.jsx';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
-import i18 from '../../locales/translation/i18next.jsx';
 import { faBell, faChartDiagram, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import Guide from '../Pages/Guides.jsx';
 import Privacypolicy from '../Pages/Privacyplicy.jsx';
@@ -93,7 +92,6 @@ function Nav() {
   const { t } = useTranslation();
   const [darkmode, setDarkmode] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const links = t("Links", { returnObjects: true });
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -171,51 +169,51 @@ function Nav() {
           border-r border-gray-400 shadow-lg`}>
           <h2 className={`${darkmode ? 'text-white' : 'text-black'} text-3xl`}>Stockhub</h2>
           <ul className={`${darkmode ? 'text-white' : 'text-black'} mt-10`}>
-            <li className='mt-6'><a href='/dashboard' className="flex items-center gap-2"><FontAwesomeIcon icon={faChartDiagram}/>{links[0]}</a></li>
-            {userProfile.role === "Admin" && <li className='mt-7'><a href="/notification" className="flex items-center gap-2"><FontAwesomeIcon icon={faBell} />{links[1]}</a></li>}
-            <li className='mt-6'>
+            <li className='mt-5'><a href='/dashboard' className="flex items-center gap-2"><FontAwesomeIcon icon={faChartDiagram}/>Dashboard</a></li>
+            {userProfile.role === "Admin" && <li className='mt-7'><a href="/notification" className="flex items-center gap-2"><FontAwesomeIcon icon={faBell} />Announcement</a></li>}
+            <li className='mt-5'>
   <a href='/products' className="flex items-center gap-2">
     <FontAwesomeIcon icon={faBox} />
-    {links[2]}
+    Products
   </a>
 </li>
-<li className='mt-6'>
+<li className='mt-5'>
   <a href="/category" className="flex items-center gap-2">
     <FontAwesomeIcon icon={faLayerGroup} />
-    {links[3]}
+   Category
   </a>
 </li>
-<li className='mt-6'>
+<li className='mt-5'>
   <a href="/stock" className="flex items-center gap-2">
     <FontAwesomeIcon icon={faBoxes} />
-    {links[4]}
+   Stockin
   </a>
 </li>
-<li className='mt-6'>
+<li className='mt-5'>
   <a href="/stockout" className="flex items-center gap-2">
     <FontAwesomeIcon icon={faBoxOpen} />
-    {links[5]}
+    Stockout
   </a>
 </li>
-<li className='mt-6'>
+<li className='mt-5'>
   <a href="/customers" className="flex items-center gap-2">
     <FontAwesomeIcon icon={faUsers} />
-    {links[6]}
+    Customers
   </a>
 </li>
-<li className='mt-6'>
+<li className='mt-5'>
   <a href="/suppliers" className="flex items-center gap-2">
     <FontAwesomeIcon icon={faTruck} />
-    {links[7]}
+    Suppliers
   </a>
 </li>
-<li className='mt-6'>
+<li className='mt-5'>
   <a href="/settings" className="flex items-center gap-2">
     <FontAwesomeIcon icon={faCog} />
-    {links[8]}
+   Settings
   </a>
 </li>
-<li className='mt-6'>
+<li className='mt-5'>
   <a href="/ask-ai" className="flex items-center gap-2">
     <FontAwesomeIcon icon={faRobot} />
     Ask AI
@@ -261,7 +259,7 @@ function Nav() {
           <Route path="/category/viewcategory/:categoryid" element={<ProtectedRoute element={<ViewSingleCategory darkmode={darkmode} />} />} />
           <Route path="/category/update/:categoryid" element={<ProtectedRoute element={<UpdateCategory darkmode={darkmode} />} />} />
           <Route path="/category/delete/:categoryid" element={<ProtectedRoute element={<DeleteCategory darkmode={darkmode} />} />} />
-          <Route path="/category/add" element={<ProtectedRoute element={<AddCategory darkmode={darkmode} />} allowedRoles={["Admin"]} />} />
+          <Route path="/category/add" element={<ProtectedRoute element={<AddCategory darkmode={darkmode} />} />} />
           
           <Route path="/notification" element={<ProtectedRoute element={<AdminNotification darkmode={darkmode} />} allowedRoles={["Admin"]} />} />
           
@@ -278,10 +276,10 @@ function Nav() {
           <Route path="/supplier/update/:supplierId" element={<ProtectedRoute element={<UpdateSupplier darkmode={darkmode} />} />} />
           <Route path="/supplier/delete/:supplierId" element={<ProtectedRoute element={<DeleteSupplier darkmode={darkmode} />} />} />
 
-          <Route path="/stock" element={<ProtectedRoute element={<Stock darkmode={darkmode} tr={t}/>} />} />
+          <Route path="/stock" element={<ProtectedRoute element={<Stock darkmode={darkmode}/>} />} />
           <Route path="/stock/add/:productId" element={<ProtectedRoute element={<AddStock darkmode={darkmode}/>} />} />
 
-          <Route path="/stockout" element={<ProtectedRoute element={<StockOut darkmode={darkmode} tr={t}/>} />} />
+          <Route path="/stockout" element={<ProtectedRoute element={<StockOut darkmode={darkmode}/>} />} />
           <Route path="/stockout/add/:productId" element={<ProtectedRoute element={<AddStockOut darkmode={darkmode} />} />} />
 
           <Route path="/customers" element={<ProtectedRoute element={<Customers darkmode={darkmode} />} />} />

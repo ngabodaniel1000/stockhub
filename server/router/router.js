@@ -48,8 +48,6 @@ const addstockoutcontroller = require("../controller/stockout/addstockout")
 const updatestockoutcontroller = require("../controller/stockout/updatestockout")
 const deletestockoutcontroller = require("../controller/stockout/deletestockout")
 
-// importing controller required for dashboard
-const lengthcontroller = require("../controller/dashboard/length")
 
 // importing setting controller
 const settingcontroller = require("../controller/settings/addsetting")
@@ -112,9 +110,6 @@ router.post("/stockout/add/:productId", Middleware.ensureAuthenticated, addstock
 router.get("/stockout/view", Middleware.ensureAuthenticated, viewstockoutcontroller.viewStockOut)
 router.put("/stockout/update/:stockOutId", Middleware.ensureAuthenticated, updatestockoutcontroller.updateStockOutStatus)
 router.delete("/stockout/delete/:stockOutId", Middleware.ensureAuthenticated, deletestockoutcontroller.delete)
-
-// dashboard routes
-router.get("/dashboard/length",Middleware.ensureAuthenticated,lengthcontroller.lengthdetails)
 
 // setting routes
 router.put("/settings/update",settingcontroller.updatesetting)

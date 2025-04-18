@@ -24,7 +24,7 @@ exports.getDashboardOverview = async (req, res) => {
             CategoryModel.countDocuments(),
             CustomerModel.countDocuments(),
             SupplierModel.countDocuments(),
-            ProductModel.countDocuments({ quantity: { $lte: 0 } }),
+            ProductModel.countDocuments({ quantity: { $eq:0 } }),
             StockInModel.find({company:companyid}).sort({ createdAt: -1 }).limit(5).populate({
                 path: 'product',
                 select: 'productname'
